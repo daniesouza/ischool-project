@@ -1,0 +1,14 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">  
+
+
+	<p:dock>
+	       <p:menuitem value="Contato"   icon="/resources/images/misc/pessoa.png"       onstart="PF('statusDialog').show();"  onsuccess="PF('statusDialog').hide();modalContato.show()" action="#{contatoBean.pesquisarContatos}" update="painelTabela"/>
+	       <p:menuitem value="Usuarios"  icon="/resources/images/misc/profile.png"      onstart="PF('statusDialog').show();"  onsuccess="PF('statusDialog').hide();"  />
+	</p:dock>
+
+</html>

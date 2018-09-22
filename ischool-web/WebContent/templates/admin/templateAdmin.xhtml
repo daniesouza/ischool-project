@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+ 	  xmlns:p="http://primefaces.org/ui"> 
+
+ <h:head>
+   <style type="text/css">.ui-widget {font-size: 12px !important;}</style> 
+   <title> #{msgs.sistema_ischool}</title>   
+   <h:outputScript name="util.js" library="js" target="head" />   
+ </h:head>
+
+<f:view locale="#{localeBean.locale}">	
+	<h:form id="formulario">
+		<h:body>		
+		
+		<p:growl id="mensagem" showDetail="true"/>
+		<p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+		
+		<p:dialog modal="true" widgetVar="statusDialog" header="Carregando..."  draggable="false" closable="false" resizable="false">  
+		    <p:graphicImage value="/resources/images/misc/ajaxloadingbar.gif" />  
+		</p:dialog> 
+		
+		<!-- 30 min -->
+		<p:idleMonitor timeout="1800000"   
+            onidle="PF('idleDialog').show()"/>  
+              
+		<p:dialog header="Sua sessão expirou!" resizable="false"  closable="false" draggable="false" widgetVar="idleDialog" modal="true" width="400">  	   
+		   <center>
+			   	 <h2><h:outputText value="Sua sessão expirou!" /> </h2>			    
+			    <p:commandButton  ajax="false" action="/paginas/public/home" value="Pagina Inicial" />
+		    </center>
+		</p:dialog>		
+		
+			<center>
+				<div style="width: 80%; background-color: white">	
+					<div>
+						
+						<!-- ###################### CABEÇALHO DA PAGINA ################ -->
+						
+						<div style="width: 99%">
+							<ui:include src="/templates/admin/cabecalho.xhtml"/> 	
+						</div>
+						
+						
+						<!-- ###################### MENU ################ -->
+						<div style="width: 99%">
+							<ui:include src="/templates/admin/menu.xhtml" />
+						</div>					
+										
+					</div>
+					
+						<!-- ######################CORPO DA PAGINA DEFINIDO PELO UI:INSERT ################ -->
+					<div style="background: white; width: 99%;" >
+						<ui:insert name="corpoPagina" />
+					</div>
+							
+							
+						<!-- ######################RODAPE ################ -->
+								
+					<div style="width: 99%">
+						<ui:include src="/templates/admin/rodape.xhtml"/>	
+					</div>
+								
+				</div>				
+			</center>	
+		</h:body>
+	</h:form>
+</f:view>	
+</html>

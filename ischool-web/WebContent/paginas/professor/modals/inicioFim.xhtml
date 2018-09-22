@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:dialog header="#{gerenciamentoAulaBean.entidade.evento.nome}"
+	widgetVar="modalInicioFim" class="modalEventos" resizable="fase"
+	draggable="false" width="430" style="height: auto;" modal="true">
+	<hr></hr>
+
+	<h:panelGrid columns="2"
+		rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoInicioFim}">
+
+		<h:column>
+			<h:outputFormat value="Aluno:" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="#{gerenciamentoAulaBean.entidade.aluno.nome}"
+				rendered="#{!empty gerenciamentoAulaBean.entidade.aluno}"
+				styleClass="nome_aluno" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Inicio:" />
+		</h:column>
+
+		<h:column>
+			<p:calendar value="#{gerenciamentoAulaBean.entidade.dataInicio}"
+				pattern="HH:mm" timeOnly="true"
+				disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusCancelado
+							 or gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeWarning}"
+				styleClass="hora" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Fim:" />
+		</h:column>
+
+		<h:column>
+			<p:calendar value="#{gerenciamentoAulaBean.entidade.dataFim}"
+				pattern="HH:mm" timeOnly="true"
+				disabled="#{gerenciamentoAulaBean.entidade.icone != gerenciamentoAulaBean.entidade.iconeWarning or gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusCancelado}"
+				styleClass="hora" />
+		</h:column>
+	</h:panelGrid>
+
+	<br />
+	<br />
+
+	<div class="input_text_container">
+		<h:panelGrid
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoInicioFim}">
+			<h:column>
+				<h:outputFormat value="Observações" />
+			</h:column>
+			<h:column>
+				<p:inputTextarea id="observacoes" rows="8" cols="50"
+					counter="counter2" maxlength="255"
+					readonly="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusCancelado}"
+					counterTemplate="{0} Caracteres Restantes." autoResize="true"
+					value="#{gerenciamentoAulaBean.entidade.observacoes}"></p:inputTextarea>
+				<br />
+				<h:outputText styleClass="text_counter" id="counter2" />
+			</h:column>
+		</h:panelGrid>
+	</div>
+	<br />
+	<br />
+
+	<div class="button_container">
+		<p:commandButton value="Salvar" title="clique para salvar"
+			action="#{gerenciamentoAulaBean.salvarOuAtualizar()}"
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoInicioFim and gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusOk}"
+			disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk}"
+			oncomplete="validarFecharModal(args,PF('modalInicioFim'))"
+			update=":formulario:mensagem,@(.alunoList#{gerenciamentoAulaBean.entidade.aluno.id})"
+			styleClass="button_class btn_salvar" />
+
+		<p:commandButton value="Cancelar" onclick="PF('confirmCancelarIniFim').show()"
+			disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeNaoOk}"
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoInicioFim and gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusOk}"
+			styleClass="button_class btn_apagar">
+		</p:commandButton>
+	</div>
+</p:dialog>
+
+
+	<p:confirmDialog id="confirmCancelarIniFim"
+		widgetVar="confirmCancelarIniFim"
+		header="Iniciando processo de exclusão" severity="alert" width="400"
+		style="height: auto;" class="modalEventos" >
+		<div class="apagar_registro">
+			<center>
+				<p:outputPanel style="position:relative;top:-20px">Tem certeza que deseja cancelar este evento?<br />
+					<br />
+				Esta ação não poderá ser desfeita.</p:outputPanel>
+				<br />
+				<div class="button_container">
+					<p:commandButton value="Sim" 
+						oncomplete="PF('confirmCancelarIniFim').hide();validarFecharModal(args,PF('modalInicioFim'))"
+						action="#{gerenciamentoAulaBean.cancelarEventoExecutado()}"
+						update=":formulario:mensagem,@(.alunoList#{gerenciamentoAulaBean.entidade.aluno.id})"
+						rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoInicioFim}"					
+						styleClass="button_class btn_apagar" />
+					<p:commandButton value="Não" 
+						onclick="PF('confirmCancelarIniFim').hide()"	
+						type="button" styleClass="button_class btn_salvar"
+						rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoInicioFim}"/>
+				</div>
+			</center>
+		</div>
+	</p:confirmDialog>
+
+
+</html>

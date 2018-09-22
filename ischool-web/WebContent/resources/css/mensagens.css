@@ -1,0 +1,201 @@
+.window_mensagens {
+  border-radius: 15px;
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  left: 400px;
+  top: 244px;
+  width: 800px;
+  height: 550px;
+  z-index: 2;
+}
+
+.header_mensagens {
+  border-width: 1px;
+  border-color: rgb(215, 215, 215);
+  border-style: solid;
+  border-radius: 15px 15px 0 0;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 2.5px 4.33px 10px 0px rgba(0, 0, 0, 0.031);
+  position: absolute;
+  left: 400px;
+  top: 243px;
+  width: 798px;
+  height: 59px;
+  z-index: 3;
+}
+
+
+
+.input_mensagens {
+  border-width: 2px;
+  border-color: rgb(0, 174, 239);
+  border-style: solid;
+  padding-right:100px; 
+  padding-left: 15px;
+  font-size: 16px;    
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0.156px -0.988px 5px 0px rgba(0, 0, 0, 0.031);
+  position: absolute;
+  left: 400px;
+  top: 735px;
+  width: 681px;
+  height: 55px;
+  z-index: 4;
+}
+
+.clipe_mensagens {
+  background-image: url(img/clip-ico.png);
+  position: absolute;
+  left: 1124px;
+  top: 751px;
+  width: 19px;
+  height: 32px;
+  z-index: 11;
+  cursor: pointer;
+}
+
+.emoticom_mensagens {
+    background-image:url(images/emoticom.png);
+  position: absolute;
+  left: 1155px;
+  top: 751px;
+  width: 30px;
+  height: 30px;
+  z-index: 12;
+  cursor: pointer;
+}
+
+.divisoria_mensagens {
+  background-color: rgb(236, 236, 236);
+  position: absolute;
+  left: 1104px;
+  top: 742px;
+  width: 1px;
+  height: 47px;
+  z-index: 14;
+}
+
+.msg_ico_mensagens {
+  background-image: url(img/msg-ico.png); 
+  position: absolute;
+  left: 417px;
+  top: 258px;
+  width: 43px;
+  height: 31px;
+  z-index: 19;
+}
+
+.filho_ico_mensagens {
+    background-image: url(img/filho-ico.png);
+  position: absolute;
+  left: 640px;
+  top: 254px;
+  width: 37px;
+  height: 37px;
+  z-index: 18;
+}
+
+.fechar_mensagens {
+  border-radius: 50%;
+  background-color: rgb(195, 195, 195);
+  text-align: center;
+  line-height: 2px;
+  font-family: Roboto;
+  cursor: pointer;
+  color: #fff;    
+  position: absolute;
+  left: 1154px;
+  top: 259px;
+  width: 32px;
+  height: 32px;
+  z-index: 20;
+}
+
+.fechar :hover{
+   
+}
+
+
+
+.Mensagens_mensagens {
+  font-size: 22px;
+  font-family: "Roboto";
+  color: rgb(72, 223, 140);
+  position: absolute;
+  left: 466.062px;
+  top: 264.18px;
+  z-index: 16;
+}
+
+.aluno_nome_mensagens {
+  font-size: 22px;
+  font-family: "Roboto";
+  color: rgb(39, 172, 222);
+  position: absolute;
+  left: 684.062px;
+  top: 263.18px;
+  z-index: 17;
+}
+
+
+.bubble_escola_mensagens {
+  border-radius: 25px;
+  background-color: rgb(138, 229, 222);
+  position: absolute;
+  max-width: 320px;      
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: Roboto;
+  color: #756e69;
+  left: 434px;
+  top: 329px;
+  
+  z-index: 5;
+}
+
+.bubble_pai_mensagens {
+  border-radius: 25px;
+  background-color: rgb(38, 125, 255);
+  position: absolute;
+  max-width: 320px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: Roboto;
+  color: #fff;    
+  left: 820px;
+  top: 534px;
+  
+  z-index: 13;
+}
+
+
+.modelo_mensagens {
+    font-family: Roboto;
+    text-align: center;
+    color: #fff;
+}
+
+.hora_mensagens {
+  font-size: 16px;
+  font-family: "Roboto";
+  color: rgb(205, 205, 205);
+  position: absolute;
+  left: 558.344px;
+  top: 487.313px;
+  z-index: 8;
+}
+
+.hora_pai_mensagens {
+  font-size: 16px;
+  font-family: "Roboto";
+  color: rgb(205, 205, 205);
+  position: absolute;
+  left: 1017.344px;
+  top: 610.313px;
+  z-index: 9;
+}
+

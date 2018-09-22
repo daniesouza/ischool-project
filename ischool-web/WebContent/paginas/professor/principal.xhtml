@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/professor/templateProfessor.xhtml">
+
+	<ui:define name="corpoPagina">
+		<div class="corpo_container">
+			<p:panel styleClass="tabela_lista_classe"
+				header="Selecione uma Classe">
+
+				<p:dataList styleClass="table_content"
+					value="#{gerenciamentoAulaBean.listaClasses}" 
+					type="definition"
+					id="classes"
+					emptyMessage="Você não pertence a nenhuma classe. entre em contato com o administrador do sistema."
+					converter="#{genericConverter}" var="classe" paginator="true"
+					rows="#{gerenciadorEventoBean.registroPorPagina}"
+					paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"
+					currentPageReportTemplate="Página {currentPage} de {totalPages} | {totalRecords} resultados">
+
+					<h:panelGrid styleClass="grid" columns="3">
+
+						<p:commandButton styleClass="button_class select_class"
+							value="#{classe.nome} - #{classe.turma}"
+							title="Clique aqui para selecionar"
+							action="#{gerenciamentoAulaBean.carregarSessaoClasse()}"
+							oncomplete="PF('modalShowEventos').show()"
+							update=":formulario:mensagem,:formulario:modalShowEventos">
+
+							<f:setPropertyActionListener value="#{classe}"
+								target="#{gerenciamentoAulaBean.entidade.classe}" />
+						</p:commandButton>
+
+						<p:commandButton styleClass="button_class"
+							value="Imprimir Relatorio" ajax="false"
+							action="#{historicoBean.carregarHistoricoClasse(classe)}"
+							update=":formulario:mensagem"
+							icon="ui-icon-print">
+
+						</p:commandButton>
+						
+						<p:commandButton styleClass="button_class" value="Enviar Mensagem"
+							oncomplete="PF('modalEnviarMsgClasse').show();document.getElementById('formulario:textAreaClasse').value = ''"
+							icon="ui-icon-mail-closed"
+							update=":formulario:modalEnviarMsgClasse">
+							<f:setPropertyActionListener value="#{classe}"	target="#{mensagemBean.classeSelecionada}" />
+						</p:commandButton>
+
+					</h:panelGrid>
+
+				</p:dataList>
+			</p:panel>
+		</div>
+
+		<div class="mensagem_tela_principal">
+			<p:dialog
+				header="Enviar Mensagem: #{mensagemBean.classeSelecionada.nome} - #{mensagemBean.classeSelecionada.turma}"
+				widgetVar="modalEnviarMsgClasse" id="modalEnviarMsgClasse"
+				resizable="false" draggable="false" focus="textAreaClasse">
+				<hr></hr>
+				<h:panelGrid columns="1">
+					<h:column>
+						<p:inputTextarea rows="8" cols="75" minQueryLength="4"
+							title="Escreva uma mensagem" id="textAreaClasse"
+							onkeypress="if(event.keyCode == 13){ event.returnValue=false; event.cancel=true; document.getElementById('formulario:btnEnviarClasse').click();}"
+							maxlength="256" counter="mCounterText"
+							counterTemplate="{0} / 256"
+							value="#{mensagemBean.textoMensagemClasse}" />
+						<br />
+						<h:outputText styleClass="text_counter" id="mCounterText" />
+						
+						<p:commandLink id="btnEnviarClasse"
+							action="#{mensagemBean.enviarMensagemClasse()}"
+							title="Enviar Mensagem" oncomplete="PF('modalEnviarMsgClasse').hide()"
+							update=":formulario:mensagem">
+							<h:outputText styleClass="button_class btn_send_message" value="Enviar" />
+						</p:commandLink>
+					</h:column>
+				</h:panelGrid>
+			</p:dialog>
+		</div>
+		
+		<!--  LISTA EVENTOS POR ALUNOS -->
+				
+		<div class="lista_alunos_classe">
+			<p:dialog
+				header="#{gerenciamentoAulaBean.entidade.classe.nome} - #{gerenciamentoAulaBean.entidade.classe.turma}"
+				widgetVar="modalShowEventos" id="modalShowEventos" resizable="true"
+				draggable="false" width="60%" height="70%">
+				<hr></hr>
+				<p:panel style="overflow: auto;height: 500px">
+
+					<p:dataGrid value="#{gerenciamentoAulaBean.listaAlunos}"
+						id="alunos"
+						rendered="#{!empty gerenciamentoAulaBean.entidade.classe}"
+						itemValue="#{aluno}" converter="#{genericConverter}" var="aluno"
+						columns="1" emptyMessage="Não há alunos nesta classe">
+
+						<div class="lista_container">
+
+							<p:column>
+
+								<div class="lista_header">
+									<div class="nome" style="font-size: 20px">#{aluno.nome}</div>
+									<div class="icones_print_chat">
+
+										<p:commandLink oncomplete="PF('modalEventos').show()" update=":formulario:mensagem,:formulario:tabela,:formulario:confirm">
+											<h:graphicImage value="/resources/images/event/icon/novo-evento.png" style="margin-right:5px"	title="Adicionar Evento" />
+											<f:setPropertyActionListener value="#{aluno}"	target="#{gerenciamentoAulaBean.entidade.aluno}" />
+										</p:commandLink>
+																			
+										<p:commandLink
+											action="#{mensagemBean.carregarMensagensAluno()}"
+											update=":formulario:dialogMensagens,:formulario:dialogMessagesOpen,:formulario:gridAlertaMensagens,:formulario:menuGroup,:formulario:titleNotif"
+											oncomplete="PF('dialogMensagens').show();setChatScrollToBottom();
+		                                        document.title = document.getElementById('formulario:titleNotif').innerHTML == 0 ? '#{msgs.sistema_ischool}' : '#{msgs.sistema_ischool}' +' ('+ document.getElementById('formulario:titleNotif').innerHTML + ')'">
+											<h:graphicImage
+												value="/resources/images/event/icon/mail_hist.png"
+												title="Enviar Mensagem aos pais de #{aluno.nome}" style="margin-right:5px" />
+											<f:setPropertyActionListener value="#{aluno}"
+												target="#{mensagemBean.alunoSelecionado}" />
+										</p:commandLink>
+
+										<h:commandLink
+											action="#{historicoBean.carregarHistoricoAluno()}"
+											target="_blank">
+											<h:graphicImage value="/resources/images/event/icon/hist.png"
+												title="Imprimir Relatório de Atividades" />
+											<f:setPropertyActionListener value="#{aluno}"
+												target="#{historicoBean.alunoSelecionado}" />
+										</h:commandLink>
+									</div>
+								</div>
+
+								<br />
+								<h:panelGrid columns="1" cellspacing="30" columnClasses="alignTop,alignTop">
+
+										<p:dataGrid value="#{aluno.eventosExecutados}" 
+											emptyMessage="Não há eventos inseridos. Clique no botao + para inserir novos eventos"
+											itemValue="#{eventoVar}" converter="#{genericConverter}" 
+											var="eventoVar" id="listaAluno"	styleClass="alunoList#{aluno.id}"								
+											columns="#{aluno.eventosExecutados.size() > 20 ? 20: aluno.eventosExecutados.size()}">
+
+											
+											<p:commandLink title="#{eventoVar.evento.nome}"
+												rendered="#{eventoVar.statusEventoExecutado == eventoVar.statusOk}"
+												action="#{gerenciamentoAulaBean.adicionarDataHoje()}"
+												styleClass="painelEventos"
+												oncomplete="abrirPopUps(#{eventoVar.tipo})" 
+												update=":formulario:mensagem,@(.modalEventos)">
+
+												<div class="event_icon_container" >
+													<p:outputPanel styleClass="evento_nome">#{eventoVar.evento.nome}</p:outputPanel>
+													<p:graphicImage 
+														value="/resources/images/event/icon/#{eventoVar.evento.icone}"
+														width="63" height="63" />
+													<p:graphicImage class="icon_posicao"
+														value="/resources/images/event/icon/#{eventoVar.icone}"/>
+												</div>
+
+												<f:setPropertyActionListener value="#{eventoVar}"	target="#{gerenciamentoAulaBean.entidade}" />
+												
+											</p:commandLink>
+											
+											<p:commandLink title="#{eventoVar.evento.nome} Cancelado"
+												rendered="#{eventoVar.statusEventoExecutado == eventoVar.statusCancelado}"
+												styleClass="painelEventos"
+												oncomplete="abrirPopUps(#{eventoVar.tipo})" 
+												update=":formulario:mensagem,@(.modalEventos)" >
+
+												<div class="event_icon_container" >
+													<p:outputPanel styleClass="evento_nome">#{eventoVar.evento.nome}</p:outputPanel>
+													<p:graphicImage 
+														value="/resources/images/event/icon/#{eventoVar.evento.icone}"
+														width="63" height="63" />
+													<p:graphicImage class="icon_canc_posicao"
+														value="/resources/images/event/icon/#{eventoVar.icone}" width="60" height="60"/>
+												</div>	
+												
+												<f:setPropertyActionListener value="#{eventoVar}"	target="#{gerenciamentoAulaBean.entidade}" />
+																							
+											</p:commandLink>											
+											<br/>
+										</p:dataGrid>
+								</h:panelGrid>
+							</p:column>
+						</div>
+					</p:dataGrid>
+
+				</p:panel>
+
+			</p:dialog>
+
+		</div>
+		
+		<div class="lista_alunos_classe">
+			<p:dialog header="Adicionar Eventos"  widgetVar="modalEventos" id="modalEventos" resizable="true" width="30%" style="height: auto;" modal="true">
+				<hr></hr>
+				<div style="height:500px;overflow:auto">
+				
+					 <p:panel id="tabela">  
+						<hr></hr>
+						<p:dataTable var="item" height="100" value="#{gerenciamentoAulaBean.entidade.classe.eventos}" emptyMessage="Não há registros na tabela" rowKey="#{item}"
+							rendered="#{!empty gerenciamentoAulaBean.entidade.aluno}" widgetVar="tableVar" selection="#{gerenciamentoAulaBean.eventosSelecionados}">	
+	
+							<p:column selectionMode="multiple" style="width:50px;text-align:right;"/>
+																			
+							<p:column style="width:60px;">  
+				                 <p:graphicImage value="/resources/images/event/icon/#{item.icone}" width="35" height="45" />
+				            </p:column>
+				            <p:column>  
+				                 <h:outputText value="#{item.nome}"/>
+				            </p:column>		
+				            												
+						</p:dataTable>
+		
+				  </p:panel> 
+	
+			 	 </div>
+			  		  
+			  <p:commandButton value="Salvar"  oncomplete="PF('confirmation').show()" styleClass="button_class btn_salvar" />	
+			
+			</p:dialog>
+		</div>
+	
+		<div class="lista_alunos_classe">	    
+			<p:confirmDialog id="confirmDialog"
+				widgetVar="confirmation"
+				header="Iniciando processo de inclusão" severity="alert"
+				width="400" style="height: auto;">
+				<div class="apagar_registro">
+					<center>
+						<p:outputPanel id="confirm" style="position:relative;top:-20px">Confirma inclusão?
+		
+						<div class="button_container">
+						<br/><br/>
+			        		<p:commandButton  rendered="#{!empty gerenciamentoAulaBean.entidade.aluno}" value="Sim" oncomplete="PF('confirmation').hide();PF('modalEventos').hide();PF('tableVar').unselectAllRows()"  
+			                    action="#{gerenciamentoAulaBean.adicionarEvento()}"  update="@(.alunoList#{gerenciamentoAulaBean.entidade.aluno.id})" styleClass="button_class btn_salvar" />
+							<p:commandButton value="Não" onclick="PF('confirmation').hide()" type="button" styleClass="button_class btn_apagar" />
+						</div>
+						
+						</p:outputPanel>
+
+					</center>
+				</div>
+			</p:confirmDialog>	    	
+		</div>
+		
+ 
+		<!--  INCLUSAO DE MODALS -->
+
+		<div class="popup_modal_container">
+			<ui:include src="/paginas/professor/modals/informativo.xhtml" />
+			<ui:include src="/paginas/professor/modals/inicioFim.xhtml" />
+			<ui:include src="/paginas/professor/modals/alimento.xhtml" />
+			<ui:include src="/paginas/professor/modals/evacuacao.xhtml" />
+			<ui:include src="/paginas/professor/modals/medicamento.xhtml" />
+			<ui:include src="/paginas/professor/modals/favorEnviar.xhtml" />
+			<ui:include src="/paginas/professor/modals/lembrete.xhtml" />
+		</div>
+
+	</ui:define>
+</ui:composition>
+
+</html>

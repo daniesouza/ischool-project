@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:dialog widgetVar="dialogMensagens" id="dialogMensagens" width="600"
+		modal="false" resizable="false" styleClass="notificacaoTitulo curvar_pontas"
+		header="Mensagens - #{mensagemBean.alunoSelecionado.nome}">
+	<div class="mensagem_popup_aluno">		
+		<hr class="hr_title"></hr>
+
+		<h:inputHidden id="dialogMessagesOpen"
+			value="#{mensagemBean.openMessageStatus}" />
+		<p:ajax event="close"
+			listener="#{mensagemBean.dialogMessagesClosed()}" global="false"
+			update=":formulario:dialogMessagesOpen" />
+
+
+		<h:panelGrid rendered="#{!empty mensagemBean.alunoSelecionado}"
+			id="painelMensagens">
+
+			<h:inputHidden id="idAlunoSelecionado"
+				value="#{mensagemBean.alunoSelecionado.id}" />
+
+			<p:scrollPanel style="width:575px;height:300px" mode="native">
+
+				<div class="message_hist_container">
+
+					<p:dataGrid value="#{mensagemBean.alunoSelecionado.mensagems}"
+						columns="1" styleClass="datalist-noborder" var="mensagem"
+						id="tabelaMensagens" emptyMessage="Não há mensagens">
+										
+						<h:column rendered="#{mensagem.usuario.autoridade == mensagem.usuario.professor}">
+							<div style="background-color: gainsboro;"> 
+								
+								<p:graphicImage value="/resources/images/messages/professor.png" title="Professor" />								
+								<span class="nome_remetente"> <h:outputText
+										value="#{mensagem.usuario.nome} " /> - <h:outputText
+										value="#{mensagem.dataCadastro}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+									</h:outputText>
+								</span>
+								
+								<br />
+								<hr></hr>
+								<h:outputText
+									value="#{mensagem.mensagem}" rendered="#{empty mensagem.caminhoArquivo}"
+									style="margin:10px;display:display: block;" />
+									
+								<h:outputText
+									value="Adicionado #{mensagem.mensagem}" rendered="#{not empty mensagem.caminhoArquivo}"
+									style="margin:10px;display:display: block;" />	
+									
+							    <p:commandLink  rendered="#{not empty mensagem.caminhoArquivo}"
+							    	 actionListener="#{mensagemBean.downloadFile(mensagem)}" ajax="false">
+							    	 <p:graphicImage value="/resources/images/messages/download.png" width="50" height="50" />							    	 
+							        <p:fileDownload value="#{mensagemBean.file}"  />
+							    </p:commandLink>	
+						  	</div>
+						</h:column>
+						
+						<h:column rendered="#{mensagem.usuario.autoridade == mensagem.usuario.responsavel}" >
+							<div style="background-color: #93e3c6;"> 
+
+								<p:graphicImage value="/resources/images/messages/pais.png"	title="Responsavel"	/>								
+								<span class="nome_remetente"> <h:outputText
+										value="#{mensagem.usuario.nome} " /> - <h:outputText
+										value="#{mensagem.dataCadastro}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+									</h:outputText>:
+								</span>
+								
+								<br />
+								<hr></hr>
+								<h:outputText
+									value="#{mensagem.mensagem}" rendered="#{empty mensagem.caminhoArquivo}"
+									style="margin:10px;display:display: block;" />
+									
+								<h:outputText
+									value="Adicionado #{mensagem.mensagem}" rendered="#{not empty mensagem.caminhoArquivo}"
+									style="margin:10px;display:display: block;" />	
+									
+							    <p:commandLink  rendered="#{not empty mensagem.caminhoArquivo}" title="Baixar Arquivo"
+							    	 actionListener="#{mensagemBean.downloadFile(mensagem)}" ajax="false">
+							    	 <p:graphicImage value="/resources/images/messages/download.png" width="50" height="50" />							    	 
+							        <p:fileDownload value="#{mensagemBean.file}"  />
+							    </p:commandLink>	
+						  	</div>
+						</h:column>
+						
+						<h:column rendered="#{mensagem.usuario.autoridade == mensagem.usuario.adminCliente}">
+							<div style="background-color: #eda340;"> 
+								<p:graphicImage value="/resources/images/messages/professor.png" />
+									
+								<span class="nome_remetente"> <h:outputText
+										value="#{mensagem.usuario.nome} " /> - <h:outputText
+										value="#{mensagem.dataCadastro}">
+										<f:convertDateTime  pattern="dd/MM/yyyy HH:mm" />
+									</h:outputText>:
+								</span>
+								
+								<br />
+								<hr></hr>
+								<h:outputText
+									value="#{mensagem.mensagem}" rendered="#{empty mensagem.caminhoArquivo}"
+									style="margin:10px;display:display: block;" />
+									
+								<h:outputText
+									value="Adicionado #{mensagem.mensagem}" rendered="#{not empty mensagem.caminhoArquivo}"
+									style="margin:10px;display:display: block;" />	
+									
+							    <p:commandLink  rendered="#{not empty mensagem.caminhoArquivo}"
+							    	 actionListener="#{mensagemBean.downloadFile(mensagem)}" ajax="false">
+							    	 <p:graphicImage value="/resources/images/messages/download.png" width="50" height="50" />							    	 
+							        <p:fileDownload value="#{mensagemBean.file}"  />
+							    </p:commandLink>	
+						  	</div>
+						</h:column>												
+						  
+					</p:dataGrid>
+				</div>
+
+			</p:scrollPanel>
+
+		</h:panelGrid>
+		
+			<h:panelGrid>
+				<p:fileUpload fileUploadListener="#{mensagemBean.handleFileUpload}"
+					invalidFileMessage="Tipo de Arquivo inválido"
+					mode="advanced"
+					multiple="false"
+					dragDropSupport="false"
+					update=":formulario:mensagem,:formulario:tabelaMensagens"
+					fileLimitMessage="Apenas um arquivo por vez" 
+					invalidSizeMessage="Máx 30MB "
+					label="Enviar Arquivo (máx 30MB)" 
+					id="upload"
+					auto="true"
+					showbuttons="false"
+					uploadLabel="Enviar"
+					cancelLabel="Cancelar"
+					sizeLimit="30000000"					 					
+					allowTypes="/(\.|\/)(gif|jpe?g|png|mp3|mpeg|mp4|3gp)$/"
+					onstart="$('.ui-fileupload-cancel').hide()"
+					oncomplete="setChatScrollToBottom();"
+					 />
+			</h:panelGrid>
+
+			<h:panelGrid columns="1">
+				<h:column>
+					<p:inputTextarea rows="3" cols="53" minQueryLength="4"
+						title="Escreva uma mensagem"
+						onkeypress="enviarMsg()"
+						maxlength="56" counter="mCounter" counterTemplate="{0} / 56"
+						value="#{mensagemBean.entidade.mensagem}" id="textoMsg"/>
+					<br />
+					<h:outputText styleClass="text_counter" id="mCounter" />
+					<p:commandLink id="btnEnviar" style="display:none"
+						actionListener="#{mensagemBean.salvarOuAtualizar()}"
+						global="false" title="Enviar Mensagem"
+						oncomplete="setChatScrollToBottom();"
+						async="true"
+						update=":formulario:painelMensagens,:formulario:textoMsg">
+						<h:outputText styleClass="button_class btn_send_message"
+							value="Enviar" />
+					</p:commandLink>
+				</h:column>
+			</h:panelGrid>		
+
+	</div>		
+	</p:dialog>
+
+</html>

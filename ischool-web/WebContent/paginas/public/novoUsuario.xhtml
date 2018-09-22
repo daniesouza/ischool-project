@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>	
+	<title>#{msgs.novo_usuario}!!</title>
+</h:head>
+
+<f:view locale="#{localeBean.locale}">
+
+<h:body>
+
+	
+
+	<h:form>
+
+
+		<p:panel>
+			<h1 align="center">#{msgs.novo_usuario}!!</h1>
+		</p:panel>
+
+		<h5>
+			<p:messages id="mensagem"  showDetail="true"/>
+		</h5>
+
+		<center>
+
+			<h:panelGrid columns="2">
+
+				<h:column>
+					<h:outputFormat value="#{msgs.usuario}" />
+				</h:column>
+
+				<h:column>
+					<h:inputText size="25" value="#{usuarioBean.entidade.usuario}" required="true" requiredMessage="#{msgs.usuario_obrig}"/>
+				</h:column>
+				
+				<h:column>
+					<h:outputFormat value="nome" />
+				</h:column>
+
+				<h:column>
+					<h:inputText size="25" value="#{usuarioBean.entidade.nome}" required="true" requiredMessage="nome obrig"/>
+				</h:column>				
+
+				<h:column>
+					<h:outputFormat value="#{msgs.senha}" />
+				</h:column>
+
+				<h:column>
+					<h:inputSecret size="25" value="#{usuarioBean.entidade.senha}" required="true" requiredMessage="#{msgs.senha_obrig}" />
+				</h:column>
+				
+				<h:column>
+					<h:outputText value="CPF"/>
+				</h:column>
+					
+				<h:column>
+					<p:inputMask mask="99999999999" value="#{usuarioBean.entidade.cpf}"/>		
+				</h:column>	
+
+				<h:column>
+					<h:outputFormat value="#{msgs.tipo}" />
+				</h:column>
+
+				<h:column>
+					<h:selectOneMenu value="#{usuarioBean.entidade.autoridade}">					
+						<f:selectItem itemLabel="Administrador" itemValue="#{usuarioBean.entidade.administrador}" />
+						<f:selectItem itemLabel="Admin Cliente" itemValue="#{usuarioBean.entidade.adminCliente}" />
+						<f:selectItem itemLabel="Usuario" itemValue="#{usuarioBean.entidade.professor}"  />
+						<f:selectItem itemLabel="Reponsavel" itemValue="#{usuarioBean.entidade.responsavel}" />
+					</h:selectOneMenu>
+				</h:column>
+				
+
+				<h:column>
+					<h:outputFormat value="ativo" />
+				</h:column>
+
+				<h:column>
+					<h:selectOneMenu value="#{usuarioBean.entidade.ativo}">
+						<f:selectItem itemLabel="ATIVADO" itemValue="true" />
+						<f:selectItem itemLabel="DESATIVADO" itemValue="false" />
+					</h:selectOneMenu>
+				</h:column>				
+			</h:panelGrid>
+
+			<br />
+
+			<h:commandButton value="#{msgs.cadastrar}" title="#{msgs.clique_cadastrar}!"	action="#{usuarioBean.salvarOuAtualizar()}" />
+
+		</center>
+
+	</h:form>
+
+</h:body>
+
+</f:view>
+
+</html>

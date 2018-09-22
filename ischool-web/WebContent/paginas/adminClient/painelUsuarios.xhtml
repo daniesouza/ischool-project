@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+ <ui:composition template="/templates/adminClient/templateAdminClient.xhtml">		
+  <ui:define name="corpoPagina">
+
+	<div class="corpo_container">
+		 <br/>
+		 <p:panel>  <h3 align="center"> Usuários Cadastrados </h3> </p:panel> 
+		 
+		 <p:panel>
+		 		
+		 		<div align="left">
+		 			<p:commandButton value="Novo" action="#{usuarioBean.novoUsuarioCliente}" styleClass="btn_salvar"
+		 			oncomplete="PF('usuario').show()" update=":formulario:mensagem,:formulario:gridUsuario"></p:commandButton>
+		 		</div> 
+		 		<br/>
+		 </p:panel>		 
+		  <p:panel header="Filtros">  
+			<div align="center">
+				<h:panelGrid columns="8" cellpadding="2">
+					<h:outputText value="Usuario" />
+					<p:inputText value="#{usuarioBean.filtro.usuario}"/>
+					
+					<h:outputText value="Nome" />
+					<p:inputText value="#{usuarioBean.filtro.nome}" />
+					
+					<h:outputText value="Telefone" />
+					<p:inputMask mask="?(99)-99999-9999" value="#{usuarioBean.filtro.telefone}"> </p:inputMask>
+					
+					<h:outputText value="CPF" />
+					<p:inputText value="#{usuarioBean.filtro.cpf}" />
+					
+					<h:column>
+					 <p:spacer height="15" width="0"></p:spacer>
+					</h:column>
+					
+					<h:column/><h:column/><h:column/><h:column/><h:column/><h:column/><h:column/>
+					
+					<h:outputText value="Data Cadastro" />
+					<p:calendar value="#{usuarioBean.filtro.dtCad}"></p:calendar>
+					
+					<h:outputText value="Endereço" />
+					<p:inputText value="#{usuarioBean.filtro.endereco}"></p:inputText>		
+										
+					<h:outputText value="Tipo" />
+					<p:selectOneMenu value="#{usuarioBean.filtro.autoridade}">
+						<f:selectItem itemLabel="Professor" itemValue="#{usuarioBean.entidade.professor}" />				
+						<f:selectItem itemLabel="Administrador" itemValue="#{usuarioBean.entidade.adminCliente}" />					
+					</p:selectOneMenu>		
+					
+					<h:outputText value="Status" />	
+					<p:selectOneMenu value="#{usuarioBean.filtro.ativo}">
+						<f:selectItem itemLabel="ATIVADO" itemValue="true"/>
+						<f:selectItem itemLabel="DESATIVADO" itemValue="false"/>
+					</p:selectOneMenu>								
+				</h:panelGrid>
+				<br/>
+				<p:commandButton value="Buscar" action="#{usuarioBean.pesquisar()}" update=":formulario:mensagem,:formulario:tabela" styleClass="btn_salvar"></p:commandButton>
+				<br/>
+				<br/>
+				</div>
+		  </p:panel> 
+		 	 
+		  <p:panel id="tabela">
+									
+				<p:dataTable var="item" height="200" value="#{usuarioBean.usuarioDataModel}" lazy="true" emptyMessage="Não há registros na tabela"
+				paginator="true" rows="#{usuarioBean.registroPorPagina}" 
+				paginatorPosition="bottom" rowKey="#{item.id}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+				currentPageReportTemplate="Página {currentPage} de {totalPages} | {totalRecords} resultados" >					
+									
+					<p:column headerText="Usuário">
+							<h:outputText value="#{item.usuario}"/>
+					</p:column>
+					
+					<p:column headerText="Nome">
+							<h:outputText value="#{item.nome}"/>
+					</p:column>
+					
+					<p:column headerText="Telefone">
+						<h:outputText value="#{item.telefone}" />
+					</p:column>				
+
+					<p:column headerText="CPF">
+						<h:outputText value="#{item.cpf}" />
+					</p:column>		
+	
+					<p:column headerText="Endereço">
+						<h:outputText value="#{item.endereco}" />
+					</p:column>
+					
+					<p:column headerText="Data Cadastro">
+						<h:outputText value="#{item.dtCad}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>	
+					
+					<p:column headerText="Tipo">
+						<h:outputText value="Professor" rendered="#{item.autoridade eq item.professor}"/>
+						<h:outputText value="Administrador" rendered="#{item.autoridade eq item.adminCliente}" />
+					</p:column>	
+
+	
+					<p:column headerText="Status">
+							<h:outputText value="Ativado" rendered="#{item.ativo}"/>
+							<h:outputText value="Desativado" rendered="#{!item.ativo}"/>
+					</p:column>	
+										
+					<p:column> 
+						 <p:commandButton value="Alterar" action="#{usuarioBean.editar}" oncomplete="PF('usuario').show()" styleClass="btn_salvar"
+						 update=":formulario:mensagem,:formulario:gridUsuario">
+            				  <f:setPropertyActionListener value="#{item}" target="#{usuarioBean.entidade}" />						
+            			 </p:commandButton>
+					</p:column>
+											
+				</p:dataTable>
+
+			</p:panel>
+
+ 		 </div>
+	    	 
+	    	  <div class="dialog_admin_resp">
+			 <p:dialog header="Usuário"  widgetVar="usuario" id="usuario" resizable="true" style="height: auto;" modal="true" >  
+		   			
+		   		 			
+				<h:panelGrid columns="4" id="gridUsuario">
+	
+					<h:column>
+						<h:outputFormat value="#{msgs.usuario}" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{usuarioBean.entidade.usuario}" readonly="#{!empty usuarioBean.entidade.idUsuario}"/>
+					</h:column>
+					
+					<h:column  rendered="#{empty usuarioBean.entidade.idUsuario}">
+						<h:outputFormat value="Senha" />
+					</h:column>
+	
+					<h:column rendered="#{empty usuarioBean.entidade.idUsuario}">
+						<p:password size="20" value="#{usuarioBean.entidade.senha}" />
+					</h:column>					
+	
+					<h:column>
+						<h:outputFormat value="Nome:" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{usuarioBean.entidade.nome}" />
+					</h:column>
+					
+					<h:column>
+						<h:outputFormat value="Endereço" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{usuarioBean.entidade.endereco}" />
+					</h:column>	
+					
+					<h:column>
+						<h:outputFormat value="Telefone" />
+					</h:column>
+	
+					<h:column>
+						<p:inputMask mask="(99)-99999-9999" size="20" value="#{usuarioBean.entidade.telefone}" />
+					</h:column>						
+					
+					<h:column>
+						<h:outputFormat value="E-mail" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{usuarioBean.entidade.email}" />
+					</h:column>	
+					
+					<h:column>
+						<h:outputText value="CPF"/>
+					</h:column>
+					
+					<h:column>
+						<p:inputMask mask="99999999999" value="#{usuarioBean.entidade.cpf}"/>		
+					</h:column>
+					
+					<h:column>
+						<h:outputText value="RG"/>
+					</h:column>
+					
+					<h:column>
+						<p:inputMask mask="99.999.999.-*" value="#{usuarioBean.entidade.rg}"/>									
+					</h:column>														
+	
+					<h:column>
+						<h:outputFormat value="#{msgs.tipo}" />
+					</h:column>
+	
+					<h:column>
+						<p:selectOneMenu value="#{usuarioBean.entidade.autoridade}">
+							<f:selectItem itemLabel="PROFESSOR" itemValue="#{usuarioBean.entidade.professor}" />
+							<f:selectItem itemLabel="ADMINISTRADOR" itemValue="#{usuarioBean.entidade.adminCliente}" />
+						</p:selectOneMenu>
+					</h:column>
+					
+					<h:outputText value="Status" />	
+					<p:selectOneMenu value="#{usuarioBean.entidade.ativo}">
+						<f:selectItem itemLabel="ATIVADO" itemValue="true"/>
+						<f:selectItem itemLabel="DESATIVADO" itemValue="false"/>
+					</p:selectOneMenu>						
+				</h:panelGrid>		
+							
+	
+				<br />
+	
+				<p:commandButton value="#{msgs.cadastrar}" title="#{msgs.clique_cadastrar}!" styleClass="btn_salvar"
+				action="#{usuarioBean.salvarOuAtualizar()}" 
+				oncomplete="validarFecharModal(args,PF('usuario'))" update=":formulario:mensagem,:formulario:tabela"/>
+			    
+	    	 </p:dialog>	    	 
+			</div>
+		
+ </ui:define>
+ </ui:composition>
+</html>

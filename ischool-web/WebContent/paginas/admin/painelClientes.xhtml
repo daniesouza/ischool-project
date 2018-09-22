@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+ <ui:composition template="/templates/admin/templateAdmin.xhtml">		
+  <ui:define name="corpoPagina">
+
+	 	<center>
+		 <p:panel>  <h3 align="center"> Clientes Cadastrados </h3> </p:panel> 
+		 
+		 <p:panel>
+		 		
+		 		<div align="left">
+		 			<p:commandButton value="Novo" action="#{clienteBean.novo()}" oncomplete="PF('cliente').show()" update=":formulario:mensagem,:formulario:gridCliente,:formulario:tabViewUsuario"></p:commandButton>
+		 		</div> 
+		 
+		 </p:panel>		 
+		  <p:panel header="Filtros" id="painel">  
+			
+				<h:panelGrid columns="8" cellpadding="2">
+					<h:outputText value="Razão Social" />
+					<p:inputText value="#{clienteBean.filtro.razaoSocial}"/>
+					
+					<h:outputText value="Nome" />
+					<p:inputText value="#{clienteBean.filtro.nome}" />
+				
+					<h:outputText value="CNPJ"/>
+					<p:inputMask mask="99999999999999" value="#{clienteBean.filtro.cnpj}"/>			
+					
+					<h:outputText value="Telefone" />
+					<p:inputMask mask="?(99)-99999-9999" value="#{clienteBean.filtro.telefone}"> </p:inputMask>
+					
+					<h:outputText value="Data Cadastro" />
+					<p:calendar value="#{clienteBean.filtro.dtCad}"></p:calendar>
+					
+					<h:outputText value="Endereço" />
+					<p:inputText value="#{clienteBean.filtro.endereco}"></p:inputText>		
+					
+					<h:outputText value="E-mail" />
+					<p:inputText value="#{clienteBean.filtro.email}"></p:inputText>		
+						
+					<h:outputText value="Status" />	
+					<p:selectOneMenu value="#{clienteBean.filtro.ativo}">
+						<f:selectItem itemLabel="ATIVADO" itemValue="true"/>
+						<f:selectItem itemLabel="DESATIVADO" itemValue="false"/>
+					</p:selectOneMenu>						
+									
+				</h:panelGrid>
+				<br/>
+				<div align="center">
+					<p:commandButton value="Buscar" action="#{clienteBean.pesquisar()}" update=":formulario:mensagem,:formulario:tabela"></p:commandButton>
+				</div>
+
+		  </p:panel> 
+		 	 
+		  <p:panel id="tabela">
+									
+				<p:dataTable var="item" height="200" value="#{clienteBean.clienteDataModel}" lazy="true" emptyMessage="Não há registros na tabela"
+				paginator="true" rows="#{clienteBean.registroPorPagina}" 
+				paginatorPosition="bottom" rowKey="#{item.id}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+				currentPageReportTemplate="Página {currentPage} de {totalPages} | {totalRecords} resultados" >					
+					
+					
+					<p:column headerText="Razão Social">
+							<p:outputLabel value="#{item.razaoSocial}"/>
+					</p:column>
+					
+					<p:column headerText="Nome">
+							<h:outputText value="#{item.nome}"/>
+					</p:column>
+					
+						
+					<p:column headerText="CNPJ">
+							<h:outputText value="#{item.cnpj}"/>
+					</p:column>
+					
+					<p:column headerText="Telefone">
+							<h:outputText value="#{item.telefone}"/>
+					</p:column>
+					
+					<p:column headerText="Data Cadastro">
+						<h:outputText value="#{item.dtCad}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>															
+					
+					<p:column headerText="Endereço">
+							<h:outputText value="#{item.endereco}"/>
+					</p:column>	
+					
+					<p:column headerText="E-mail">
+							<h:outputText value="#{item.email}"/>
+					</p:column>	
+					
+					<p:column headerText="Status">
+							<h:outputText value="Ativado" rendered="#{item.ativo}"/>
+							<h:outputText value="Desativado" rendered="#{!item.ativo}"/>
+					</p:column>	
+					
+					<p:column> 
+						 <p:commandButton value="Alterar"  action="#{clienteBean.editar()}" oncomplete="PF('cliente').show()" update=":formulario:mensagem,:formulario:gridCliente,:formulario:tabViewUsuario">
+            				  <f:setPropertyActionListener value="#{item}" target="#{clienteBean.entidade}" />						
+            			 </p:commandButton>
+					</p:column>
+							
+					<p:column rendered="false">
+						 <p:commandButton value="Excluir" oncomplete="PF('confirmation').show()">
+							  <f:setPropertyActionListener value="#{item}" target="#{clienteBean.entidade}" />	
+						 </p:commandButton>         	   
+					</p:column>
+					
+				</p:dataTable>
+
+			</p:panel>
+
+		    <p:confirmDialog id="confirmDialog" message="Confirma Exclusão?"  header="Iniciando processo de exclusão" severity="alert" widgetVar="confirmation">  
+		          <center>
+			        <p:commandButton id="confirm" value="Sim" oncomplete="PF('confirmation').hide()"  
+			                    action="#{clienteBean.excluir()}"  update=":formulario:mensagem,:formulario:tabela" />  
+			        <p:commandButton id="decline" value="Não" onclick="PF('confirmation').hide()" type="button" />   
+		        </center>               
+		    </p:confirmDialog>  		 
+		 					
+		    	 
+			 <p:dialog header="cliente"  widgetVar="cliente" id="cliente" resizable="true" width="520" style="height: auto;" modal="true" >  
+		   			
+		   		 			
+				<h:panelGrid columns="2" id="gridCliente">
+					<h:outputText value="Razão Social" />
+					<p:inputText value="#{clienteBean.entidade.razaoSocial}"/>
+					
+					<h:outputText value="Nome" />
+					<p:inputText value="#{clienteBean.entidade.nome}" />
+					
+					
+					<h:panelGrid id="labelCnpj">				
+						<h:outputText value="CNPJ"  />
+					</h:panelGrid>
+						
+					<h:panelGrid id="cnpj" >				
+						<p:inputMask mask="99999999999999" value="#{clienteBean.entidade.cnpj}"/>
+					</h:panelGrid>
+					
+					<h:outputText value="Telefone" />
+					<p:inputMask mask="?(99)-99999-9999" value="#{clienteBean.entidade.telefone}"> </p:inputMask>
+										
+					<h:outputText value="Endereço" />
+					<p:inputText value="#{clienteBean.entidade.endereco}"></p:inputText>		
+					
+					<h:outputText value="E-mail" />
+					<p:inputText value="#{clienteBean.entidade.email}"></p:inputText>		
+					
+					<h:outputText value="Status" />	
+					<p:selectOneMenu value="#{clienteBean.entidade.ativo}">
+						<f:selectItem itemLabel="Ativado" itemValue="true"/>
+						<f:selectItem itemLabel="Desativado" itemValue="false"/>
+					</p:selectOneMenu>	
+           
+				</h:panelGrid>
+				
+				<p:tabView id="tabViewUsuario">
+					
+					  <p:tab title="Usuários">
+							<p:pickList value="#{clienteBean.usuarios}"
+								converter="#{genericConverter}" var="usuario"
+								iconOnly="true" itemValue="#{usuario}"
+								itemLabel="#{usuario.usuario}"
+								showTargetFilter="true"
+								showSourceFilter="true"
+								filterMatchMode="contains" >
+				
+								<f:facet name="sourceCaption">
+									<h:outputText value="Usuários não inclusos" />
+								</f:facet>
+								<f:facet name="targetCaption">
+									<h:outputText value="Usuários inclusos" />
+								</f:facet>
+							</p:pickList> 							
+						</p:tab>																						
+						
+				</p:tabView>				
+	
+				<br />
+	
+			<p:commandButton value="#{msgs.cadastrar}" title="#{msgs.clique_cadastrar}!" action="#{clienteBean.salvarOuAtualizar()}"
+				 oncomplete="validarFecharModal(args,PF('cliente'))" update=":formulario:mensagem,:formulario:tabela,:formulario:gridCliente,:formulario:tabViewUsuario"/>
+			    
+	    	 </p:dialog>	
+	    	 
+	    	 
+	    	     	 
+
+		</center>
+	
+		
+ </ui:define>
+ </ui:composition>
+</html>

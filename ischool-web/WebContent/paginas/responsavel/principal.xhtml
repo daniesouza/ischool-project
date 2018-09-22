@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/responsavel/templateResponsavel.xhtml">
+
+	<ui:define name="corpoPagina">
+	
+	<div style="overflow: auto;height: 500px">
+		<div class="corpo_container">
+			<div class="lista_alunos_classe">
+	
+				<p:dataGrid value="#{gerenciadorAlunoBean.listaAlunos}"
+					id="alunos"
+					itemValue="#{aluno}" converter="#{genericConverter}" var="aluno"
+					columns="1" emptyMessage="Não há alunos nesta classe">
+	
+					<div class="lista_container">
+						<p:column>
+	
+							<div class="lista_header">
+								<div class="nome" style="font-size: 20px">#{aluno.nome}</div>
+								<div class="icones_print_chat">
+									<p:commandLink
+										action="#{mensagemBean.carregarMensagensAluno()}"
+										update=":formulario:dialogMensagens,:formulario:dialogMessagesOpen,:formulario:gridAlertaMensagens,:formulario:menuGroup,:formulario:titleNotif"
+										oncomplete="PF('dialogMensagens').show();setChatScrollToBottom();
+	                                        document.title = document.getElementById('formulario:titleNotif').innerHTML == 0 ? '#{msgs.sistema_ischool}' : '#{msgs.sistema_ischool}' +' ('+ document.getElementById('formulario:titleNotif').innerHTML + ')'">
+										<h:graphicImage
+											value="/resources/images/event/icon/mail_hist.png"
+											title="Enviar Mensagem" style="margin-right:5px" />
+										<f:setPropertyActionListener value="#{aluno}"
+											target="#{mensagemBean.alunoSelecionado}" />
+									</p:commandLink>
+	
+									<h:commandLink
+										action="#{historicoBean.carregarHistoricoAluno()}"
+										target="_blank">
+										<h:graphicImage value="/resources/images/event/icon/hist.png"
+											title="Imprimir Relatório de Atividades" />
+										<f:setPropertyActionListener value="#{aluno}"
+											target="#{historicoBean.alunoSelecionado}" />
+									</h:commandLink>
+								</div>
+							</div>
+	
+	
+							<br />
+							<h:panelGrid columns="1" cellspacing="30"
+								columnClasses="alignTop,alignTop">
+									<p:dataGrid value="#{aluno.eventosExecutados}"
+										emptyMessage="Não há eventos inseridos"
+										itemValue="#{eventoVar}" converter="#{genericConverter}"
+										var="eventoVar"
+										columns="#{aluno.eventosExecutados.size() > 20 ? 20: aluno.eventosExecutados.size()}">
+	
+										<p:commandLink title="#{eventoVar.evento.nome}"
+											rendered="#{eventoVar.statusEventoExecutado == eventoVar.statusOk}"					
+											styleClass="painelEventos"
+											oncomplete="abrirPopUps(#{eventoVar.tipo})"
+											update=":formulario:mensagem,@(.modalEventos)">
+	
+											<div class="event_icon_container">
+												<p:outputPanel styleClass="evento_nome">#{eventoVar.evento.nome}</p:outputPanel>
+												<p:graphicImage
+													value="/resources/images/event/icon/#{eventoVar.evento.icone}"
+													width="63" height="63" />
+												<p:graphicImage class="icon_posicao"
+													value="/resources/images/event/icon/#{eventoVar.icone}" />
+											</div>
+	
+											<f:setPropertyActionListener value="#{eventoVar}"	target="#{gerenciadorAlunoBean.entidade}" />
+											<f:setPropertyActionListener value="#{aluno}"		target="#{gerenciadorAlunoBean.entidade.aluno}" />
+											
+										</p:commandLink>
+										
+										<p:commandLink title="#{eventoVar.evento.nome} Cancelado"
+											rendered="#{eventoVar.statusEventoExecutado == eventoVar.statusCancelado}"
+											styleClass="painelEventos"
+											oncomplete="abrirPopUps(#{eventoVar.tipo})"
+											update=":formulario:mensagem,@(.modalEventos)">
+
+											<div class="event_icon_container" >
+												<p:outputPanel styleClass="evento_nome">#{eventoVar.evento.nome}</p:outputPanel>
+												<p:graphicImage 
+													value="/resources/images/event/icon/#{eventoVar.evento.icone}"
+													width="63" height="63" />
+												<p:graphicImage class="icon_canc_posicao"
+													value="/resources/images/event/icon/#{eventoVar.icone}" width="60" height="60"/>
+											</div>		
+											
+											<f:setPropertyActionListener value="#{eventoVar}"	target="#{gerenciadorAlunoBean.entidade}" />
+											<f:setPropertyActionListener value="#{aluno}"		target="#{gerenciadorAlunoBean.entidade.aluno}" />										
+										</p:commandLink>											
+										<br />
+									</p:dataGrid>
+	
+							</h:panelGrid>
+						</p:column>
+					</div>
+				</p:dataGrid>
+			
+			</div>
+		</div>
+	</div>
+
+ 
+		<!--  INCLUSAO DE MODALS -->
+
+	<div class="popup_modal_container">
+		<ui:include src="/paginas/responsavel/modals/informativo.xhtml" />
+		<ui:include src="/paginas/responsavel/modals/inicioFim.xhtml" />
+		<ui:include src="/paginas/responsavel/modals/alimento.xhtml" />
+		<ui:include src="/paginas/responsavel/modals/evacuacao.xhtml" />
+		<ui:include src="/paginas/responsavel/modals/medicamento.xhtml" />
+		<ui:include src="/paginas/responsavel/modals/favorEnviar.xhtml" />
+		<ui:include src="/paginas/responsavel/modals/lembrete.xhtml" />
+	</div>
+
+	</ui:define>
+</ui:composition>
+
+</html>

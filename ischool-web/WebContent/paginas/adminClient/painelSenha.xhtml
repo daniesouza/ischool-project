@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+ <ui:composition template="/templates/adminClient/templateAdminClient.xhtml">		
+  <ui:define name="corpoPagina">
+
+		<div class="alterar_senha">
+			<p:panel header="Alteração de Senha">
+
+				<h:panelGrid styleClass="grid" columns="2" id="painelSenha">
+					<h:outputText value="Digite a senha antiga: * " />
+					<p:password style="margin:10px" id="pwdAntigo"
+						value="#{loginControllerBean.senhaAntiga}"></p:password>
+
+					<h:outputText for="pwd1" value="Digite a nova Senha: * " />
+					<p:password style="margin:10px" id="pwd1" value="#{loginControllerBean.senhaNova}"
+						feedback="true" promptLabel="Digite a nova senha:"
+						weakLabel="Fraco" goodLabel="Médio" strongLabel="Forte" />
+
+					<h:outputText for="pwd2" value="Confirme a nova Senha: * " />
+					<p:password style="margin:10px" id="pwd2" value="#{loginControllerBean.senhaConfirma}"
+						feedback="true" promptLabel="Confirme a nova senha:"
+						weakLabel="Fraco" goodLabel="Médio" strongLabel="Forte" />
+
+
+				</h:panelGrid>
+
+				<br />
+
+				<p:commandButton styleClass="button_class btn_salvar" style="margin:0px 0px 20px 0px !important"
+					actionListener="#{loginControllerBean.salvarSenha()}"
+					value="Salvar" id="btnSalvar" update=":formulario:mensagem" />
+
+			</p:panel>
+
+
+		</div>
+	
+		
+ </ui:define>
+ </ui:composition>
+</html>

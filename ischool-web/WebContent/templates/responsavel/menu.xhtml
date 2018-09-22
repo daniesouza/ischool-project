@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<div class="bemVindo">	
+	<h5 align="center" style="color: white;">Escola: #{loginControllerBean.usuarioLogado.cliente.nome} </h5>				
+	<h5 align="center" style="color: white;">Seja bem vindo(a) #{loginControllerBean.usuarioLogado.nome} </h5>
+</div>
+
+<p:menubar id="menu">
+	<p:menuitem value="Home" action="principal" ajax="false"></p:menuitem>
+	<p:menuitem value="Notificações" oncomplete="openDialogAlert();"></p:menuitem>
+	<p:menuitem value="Relatorios" action="#" immediate="true" ajax="false" />
+	<p:menuitem value="Configurações" immediate="true" action="painelSenha"	ajax="false" />
+</p:menubar>
+
+
+<ul id="menu_icons">
+	<p:commandLink action="principal" ajax="false"><li class="icone_home"></li></p:commandLink>
+	<p:commandLink oncomplete="openDialogAlert();" ><li class="icone_notificacao">
+		<h:panelGroup id="menuGroup">
+			<h:column rendered="#{!empty mensagemBean.notificacoes}">
+				<label class="noti_bubble">#{mensagemBean.notificacoes.size()}</label>	
+			</h:column>		
+		</h:panelGroup>
+	</li> </p:commandLink>
+	<p:commandLink action="#" immediate="true" ajax="false"><li class="icone_relatorio"></li></p:commandLink>
+	<p:commandLink  immediate="true" action="painelSenha"	ajax="false" ><li class="icone_config"></li></p:commandLink>
+</ul>
+
+</html>

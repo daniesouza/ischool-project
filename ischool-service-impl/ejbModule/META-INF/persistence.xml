@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/persistence"
+	version="2.0">
+	
+	<persistence-unit name="ISchoolJPA" transaction-type="JTA">
+		 
+	 <provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:/ISchoolDS</jta-data-source>
+		
+	   <class>br.com.ischool.entity.Aluno</class>	
+	   <class>br.com.ischool.entity.Classe</class> 
+	   <class>br.com.ischool.entity.Camera</class>
+	   <class>br.com.ischool.entity.Cliente</class>
+	   <class>br.com.ischool.entity.Evento</class>
+	   <class>br.com.ischool.entity.AuxEvento</class>	   
+
+<!-- 	   ALTER TABLE EVENTO_EXECUTADO ADD INDEX (DATA_ATUALIZACAO) USING BTREE; sempre executar na base -->
+	   <class>br.com.ischool.entity.EventoExecutado</class>
+ 	   <class>br.com.ischool.entity.Usuario</class>
+ 	   <class>br.com.ischool.entity.Device</class>
+ 	   <class>br.com.ischool.entity.DeviceRegId</class>
+ 	   <class>br.com.ischool.entity.Mensagem</class>
+ 	   <class>br.com.ischool.entity.Notificacao</class>
+
+		
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+<!--             <property name="hibernate.hbm2ddl.auto" value="update"/> -->
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.show_sql" value="false"/>
+		</properties>
+	</persistence-unit>
+</persistence>

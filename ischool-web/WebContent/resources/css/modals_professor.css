@@ -1,0 +1,291 @@
+@import
+	url(http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900)
+	;
+
+/* ############# MEDICAMENTO ################# */
+.popup_modal_container * {
+	border: none;
+	padding: 0px !important;
+	font-family: 'Roboto', sans-serif !important;
+	font-weight: 300;
+}
+
+.popup_modal_container .ui-dialog .ui-dialog-content {
+	text-align: left;
+}
+
+.popup_modal_container .nome_aluno {
+	font-weight: bold;
+	margin-left: 5px;
+}
+
+.popup_modal_container .ui-dialog-content tr {
+	margin: 15px;
+	display: block;
+}
+
+.popup_modal_container .input_text_container tr {
+	margin: 0px 15px;
+	display: block;
+}
+
+.popup_modal_container .ui-dialog-content tr textarea {
+	width: 100%;
+	height: 100px;
+	overflow: auto;
+}
+
+.ui-slider-handle {
+	border: thin solid #9f9f9f !important;
+	background: #C1C1C1 !important;
+}
+
+.popup_modal_container .text_counter {
+	text-align: right;
+	width: 100%;
+	display: block;
+	font-size: 13px;
+}
+
+.popup_modal_container hr {
+	margin-bottom: 5px;
+	border: #C3C3C3 thin solid;
+}
+
+.popup_modal_container .ui-dialog {
+	border-radius: 10px;
+	padding: 10px 10px 10px 10px !important;
+	font-weight: bolder;
+}
+
+.popup_modal_container .ui-dialog-title {
+	margin-top: 0px;
+	width: 100%;
+	height: 45px;
+	color: #747474;
+	line-height: 35px;
+	font-weight: 500;
+	font-size: 22px;
+}
+
+.popup_modal_container .ui-selectoneradio .ui-widget td {
+	margin: 5px !important;
+	display: inline-block;
+}
+
+.popup_modal_container .input_qtd {
+	margin-left: 5px !important;
+}
+
+.ui-selectonemenu {
+	margin-left: 15px !important;
+}
+
+.ui-chkbox,.ui-radiobutton {
+	margin-right: 15px !important;
+}
+
+.popup_modal_container .ui-datagrid-column {
+	text-align: center;
+	float: left;
+	margin: 5px;
+}
+
+.popup_modal_container .hora input {
+	text-align: center;
+	width: 210px;
+	margin-left: 5px;
+}
+
+.popup_modal_container .button_container {
+	text-align: right;
+}
+
+.popup_modal_container .button_class {
+	width: 90px;
+	height: 30px;
+	font-family: 'Nunito', 'sans-serif' !important;
+	font-size: 14px !important;
+	font-weight: 700 !important;
+	text-align: center;
+	-webkit-box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.3)
+		!important;
+	-moz-box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.3)
+		!important;
+	box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.3) !important;
+	-webkit-box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.3)
+		!important;
+	text-shadow: 1px 1px 0px rgba(0, 0, 0, .5);
+}
+
+.popup_modal_container .btn_salvar:hover,.popup_modal_container .btn_cancelar:hover
+	{
+	-webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75) !important;
+	-moz-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75) !important;
+	box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75) !important;
+}
+
+.apagar_registro .ui-icon {
+	background: none !important;
+	height: 0px !important;
+}
+
+/* ########################################### MENSAGEM POPUP ALUNO ################################# */
+.mensagem_popup_aluno * {
+	margin: 0;
+	font-family: 'Roboto', sans-serif !important;
+	font-weight: 300;
+}
+
+.mensagem_popup_aluno .ui-dialog-content tr textarea {
+	height: 100px;
+	overflow: auto;
+	width: 98%;
+}
+
+.mensagem_popup_aluno .text_counter {
+	text-align: right;
+	width: 100%;
+	display: block;
+	font-size: 13px;
+	margin-bottom: 15px;
+	position: relative;
+	right: 5px;
+}
+
+.mensagem_popup_aluno .hr_title {
+	margin-bottom: 15px;
+	border: #C3C3C3 thin solid;
+}
+
+.mensagem_popup_aluno .ui-dialog {
+	border-radius: 10px;
+	padding: 10px 10px 10px 10px !important;
+	font-weight: bolder;
+	height: 200px;
+}
+
+.mensagem_popup_aluno .ui-dialog .ui-dialog-content {
+	overflow: hidden;
+}
+
+.mensagem_popup_aluno .ui-dialog-title {
+	margin-top: 0px;
+	padding: 0;
+	width: 100%;
+	height: 25px;
+	color: #747474;
+	line-height: 22px;
+	font-weight: 500;
+	font-size: 22px;
+	text-align: center;
+}
+
+.mensagem_popup_aluno .btn_send_message {
+	margin: 0px 5px !important;
+	width: 90px;
+	height: 30px;
+	line-height: 30px;
+	display: block;
+	float: right;
+	color: white !important;
+	border: 1px solid #7099c3 !important;
+	border-radius: 3px;
+	background: #7099c3 !important;
+	background: -moz-linear-gradient(90deg, rgb(22, 170, 252) 30%,
+		rgb(17, 144, 252) 70%) !important;
+	background: -webkit-linear-gradient(90deg, rgb(22, 170, 252) 30%,
+		rgb(17, 144, 252) 70%) !important;
+	background: -o-linear-gradient(90deg, rgb(22, 170, 252) 30%,
+		rgb(17, 144, 252) 70%) !important;
+	background: -ms-linear-gradient(90deg, rgb(22, 170, 252) 30%,
+		rgb(17, 144, 252) 70%) !important;
+	background: linear-gradient(180deg, rgb(22, 170, 252) 30%,
+		rgb(17, 144, 252) 70%) !important;
+	text-shadow: 1px 1px 0px rgba(0, 0, 0, .5);
+}
+
+.mensagem_popup_aluno .message_hist_container * {
+	background: none;
+	margin: 0;
+	padding: 0;
+}
+
+.mensagem_popup_aluno .message_hist_container tr {
+	margin: 5px;
+	display: block;
+	border: #9d9d9d thin solid;	
+	border-radius: 5px;
+}
+
+.mensagem_popup_aluno .message_hist_container td {
+	width: 100%;
+	display: inline-table;
+}
+
+.mensagem_popup_aluno .hist_messages {
+	margin: 5px;
+	display: block;
+}
+
+.mensagem_popup_aluno .hr_historico {
+	border: rgb(200, 200, 200) thin solid;
+}
+
+.mensagem_popup_aluno .nome_remetente {
+	font-weight: bolder;
+	position: relative;
+	top: -15px;
+}
+
+.notificacaoTitulo .ui-dialog-title{
+	font-family: "Roboto";	
+	text-align: center;	
+	color: #44b5ab;
+}
+
+.curvar_pontas{
+	
+	border-radius: 16px 16px 16px 16px;
+	box-shadow: 3px 3px 14px 1px #5a5a5a;
+}
+
+.counter_class {
+	    padding:1px 6px 1px 6px;
+  		background-color: rgb( 255, 221, 103 );
+	    font-weight:bold;
+	    font-size:0.8em;
+	    width: 8px;
+	    border-radius:30px;
+	    box-shadow:1px 1px 1px gray;
+	    font-family: "Roboto";
+	    
+}
+
+.hoverPop:hover{
+        background-color: #ceffee;
+        transition-duration: 1s;
+
+}
+
+.escola-icon{
+        background-size: cover;
+        opacity: 0.5;
+        width: 28px;
+        height: 28px;
+
+}
+
+.pai-icon{
+        background-size: cover;
+        opacity: 0.5;
+        width: 44px;
+        height: 44px;
+}
+
+.notificacao-texto{	
+    font-family: "Roboto";
+    font-size: 15px;
+    font-weight: 300;
+    color: grey;
+}

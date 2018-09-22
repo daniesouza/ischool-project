@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+
+
+<style type="text/css">
+.ui-widget {
+	font-size: 12px !important;
+}
+</style>
+
+
+
+
+	<title>#{msgs.sistema_ischool} - Login</title>
+</h:head>
+
+<f:view locale="#{localeBean.locale}">
+
+	<h:body>
+
+		<f:facet name="last">
+			<h:outputStylesheet library="css" name="reset.css" />
+			<h:outputStylesheet library="css" name="login.css" />
+		</f:facet>
+
+<!-- 		<div id="light_effect"></div> -->
+
+		<div id="header"></div>
+
+
+		<h:form id="container" prependId="false">	
+			<p:panel id="login_panel">
+
+				<!-- div>
+					<h3 align="center">#{msgs.sistema_ischool}!!!</h3>
+				</div-->
+
+				<!--  
+				<img id="logo" src="../../resources/images/login/logo.png"
+					width="310" height="68" alt="iSchool Logo" />
+				-->
+				
+				<div class="logo"></div>
+
+
+				<!-- <h:graphicImage id="msg_erro"	value="../../resources/images/login/erro.png" />  -->
+				<div id="login_input_data">
+
+									
+						 <p:growl showDetail="true"/>
+						 <h:panelGrid styleClass="input_table" columns="2">	
+					    	<h:column>
+					    		<h:outputFormat for="j_username" value="#{msgs.usuario}:" />
+					    	</h:column>
+					    	
+					    	<h:column>
+					    		<h:inputText size="25" id="j_username" styleClass="input_text"  required="true" requiredMessage="Login Obrigatorio"/>
+					    	</h:column>
+				
+					    	<h:column>
+					    		<h:outputFormat for="j_password" value="#{msgs.senha}" />
+					    	</h:column>
+					    	
+					    	<h:column>
+					    		<h:inputSecret size="25" styleClass="input_text" id="j_password" required="true" requiredMessage="Senha obrigatoria"/>
+					    	</h:column>      	
+					    </h:panelGrid>
+				 
+						 <p:spacer height="0" width="15px"/>
+					
+				   		 <p:commandButton  value="" styleClass="login_button" title="#{msgs.clique_logar}!" type="submit" action="#{loginControllerBean.doLogin}" ajax="false"/>		   		 
+				   		
+						<br />
+					<h:form styleClass="form_esqueceu_senha">
+	
+						<p:commandLink onclick="PF('modalEmail').show();">
+							<h:outputText styleClass="esqueceu_senha" value="Esqueceu a senha?" />
+						</p:commandLink>
+	
+					</h:form>
+
+
+				</div>
+
+			</p:panel>
+
+			<!-- div align="right">
+		<h:form>
+		        <h:selectOneMenu value="#{localeBean.language}" onchange="submit()">
+	                <f:selectItem itemValue="en" itemLabel="English" />
+	                <f:selectItem itemValue="pt" itemLabel="Portugues" />
+	            </h:selectOneMenu>
+	    </h:form> 
+    </div-->
+    </h:form>
+
+		<h:form>
+			<p:dialog id="modalEmail" header="Lembrete de senha"
+				widgetVar="modalEmail" closable="true" modal="true" width="280"
+				height="140" resizable="false">
+
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputLabel for="email" value="Email: " />
+					<p:inputText id="email" required="true" label="email"
+						requiredMessage="E-mail Obrigatório" />
+
+					<h:outputLabel for="usuario" value="#{msgs.usuario}: " />
+					<p:inputText id="usuario" required="true" label="usuario"
+						requiredMessage="Usuario Obrigatorio" />
+					<f:facet name="footer">
+						<p:commandButton style="float:right;" value="Enviar"
+							oncomplete="PF('modalEmail').hide();" />
+					</f:facet>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+
+		<!-- h:form>
+	    <p:tabView effect="fade" effectDuration="normal">  
+  
+        <p:tab title="O que é">  
+            <h:panelGrid columns="2" cellpadding="10">  
+                <p:graphicImage value="/resources/images/misc/ischoollimage1.jpg" />  
+                <h:outputText  
+                    value="ISchool.
+                    ISchool e um sistema de controle para escolas.   
+                    blah blah blah blah ." />  
+            </h:panelGrid>   
+        </p:tab>  
+        <p:tab title="Contato">  
+            <h:panelGrid columns="2" cellpadding="10">  
+                <p:graphicImage value="/resources/images/misc/contato.jpg" />  
+                <h:outputText value="E-mail:ischool@mars.com.br"></h:outputText>  
+            </h:panelGrid>  
+        </p:tab>
+        </p:tabView>
+	</h:form-->
+
+
+		<h:form>
+			<center>
+				<h:commandButton value="#{msgs.cad_usuario}"
+					title="#{msgs.clique_cad_usuario}!" action="novoUsuario.jsf" />
+			</center>
+		</h:form>
+		<br />
+
+		<div id="footer">
+			<p>2014 iSchool - Todos os Direitos Reservados</p>
+		</div>
+
+	</h:body>
+
+</f:view>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:dialog header="#{gerenciadorAlunoBean.entidade.evento.nome}"
+	widgetVar="modalInicioFim" class="modalEventos" resizable="fase"
+	draggable="false" width="430" style="height: auto;" modal="true">
+	<hr></hr>
+
+	<h:panelGrid columns="2"
+		rendered="#{gerenciadorAlunoBean.entidade.tipo == gerenciadorAlunoBean.entidade.tipoInicioFim}">
+
+		<h:column>
+			<h:outputFormat value="Aluno:" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="#{gerenciadorAlunoBean.entidade.aluno.nome}"
+				rendered="#{!empty gerenciadorAlunoBean.entidade.aluno}"
+				styleClass="nome_aluno" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Inicio:" />
+		</h:column>
+	
+		<h:column>
+			<h:outputFormat value="#{gerenciadorAlunoBean.entidade.dataInicio}">
+				<f:convertDateTime  pattern="HH:mm"/>
+			</h:outputFormat>			
+		</h:column>		
+
+		<h:column>
+			<h:outputFormat value="Fim:" />
+		</h:column>
+		
+		<h:column>
+			<h:outputFormat value="#{gerenciadorAlunoBean.entidade.dataFim}" >
+				<f:convertDateTime  pattern="HH:mm"/>
+			</h:outputFormat>			
+		</h:column>	
+				
+	</h:panelGrid>
+
+	<br />
+	<br />
+
+	<div class="input_text_container">
+		<h:panelGrid
+			rendered="#{gerenciadorAlunoBean.entidade.tipo == gerenciadorAlunoBean.entidade.tipoInicioFim}">
+			<h:column>
+				<h:outputFormat value="Observações" />
+			</h:column>
+			<h:column>
+				<p:inputTextarea id="observacoes" rows="8" cols="50"
+					counter="counter2" maxlength="255"
+					readonly="true"
+					counterTemplate="{0} Caracteres Restantes." autoResize="true"
+					value="#{gerenciadorAlunoBean.entidade.observacoes}"></p:inputTextarea>
+				<br />
+				<h:outputText styleClass="text_counter" id="counter2" />
+			</h:column>
+		</h:panelGrid>
+	</div>
+
+	<br />
+</p:dialog>
+
+
+</html>

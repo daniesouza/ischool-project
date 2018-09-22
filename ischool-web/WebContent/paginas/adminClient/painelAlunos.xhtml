@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+ <ui:composition template="/templates/adminClient/templateAdminClient.xhtml">		
+  <ui:define name="corpoPagina">
+	<div class="corpo_container">
+		 <br/>
+		 <p:panel>  <h3 align="center"> Alunos Cadastrados </h3> </p:panel> 
+		 		
+		  <p:panel header="Filtros">  
+			<div align="center">
+				<h:panelGrid columns="8" cellpadding="3" cellspacing="3" >
+					
+					<h:outputText value="Nome" />
+					<p:inputText value="#{alunoBean.filtro.nome}" />
+					
+					<h:outputText value="Cód. Aluno" />
+					<p:inputText value="#{alunoBean.filtro.codigoAluno}" />					
+					
+					<h:outputText value="Telefone" />
+					<p:inputMask mask="?(99)-99999-9999" value="#{alunoBean.filtro.telefone}"> </p:inputMask>
+					
+					<h:outputText value="Cpf" />
+					<p:inputMask mask="99999999999" value="#{alunoBean.filtro.cpf}"/>	
+					
+					<h:column>
+					 <p:spacer height="15" width="0"></p:spacer>
+					</h:column>
+					
+					<h:column/><h:column/><h:column/><h:column/><h:column/><h:column/><h:column/>
+					
+					<h:outputText value="Data Cadastro" />
+					<p:calendar value="#{alunoBean.filtro.dataCadastro}"></p:calendar>
+					
+					<h:outputText value="Data Nascimento" />
+					<p:calendar value="#{alunoBean.filtro.dataNascimento}"></p:calendar>
+					
+					<h:outputText value="Endereço" />
+					<p:inputText value="#{alunoBean.filtro.endereco}"></p:inputText>		
+
+					<h:outputText value="Status" />	
+					<p:selectOneMenu value="#{alunoBean.filtro.ativo}">
+						<f:selectItem itemLabel="ATIVADO" itemValue="true"/>
+						<f:selectItem itemLabel="DESATIVADO" itemValue="false"/>
+					</p:selectOneMenu>											
+						
+				</h:panelGrid>
+				<br/>
+						 		
+		 			<p:commandButton value="Novo" action="#{alunoBean.novo}"
+		 			styleClass="btn_salvar alileft" oncomplete="PF('aluno').show();PF('tabResp').select(0);" 
+		 			update=":formulario:mensagem,:formulario:gridAluno,:formulario:tabViewResponsaveis">
+		 			</p:commandButton>	 			
+					<p:commandButton value="Buscar" styleClass="btn_salvar" action="#{alunoBean.pesquisar()}" update=":formulario:mensagem,:formulario:tabela"></p:commandButton>
+				<br/>
+				<br/>
+			</div>	
+		  </p:panel> 
+		  <p:panel id="tabela">
+									
+				<p:dataTable var="item" height="200" value="#{alunoBean.alunoDataModel}" lazy="true" emptyMessage="Não há registros na tabela"
+				paginator="true" rows="#{alunoBean.registroPorPagina}" 
+				paginatorPosition="bottom" rowKey="#{item.id}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+				currentPageReportTemplate="Página {currentPage} de {totalPages} | {totalRecords} resultados" >					
+					
+					
+					<p:column headerText="Cód. Aluno">
+							<h:outputText value="#{item.codigoAluno}"/>
+					</p:column>
+									
+					<p:column headerText="Nome">
+							<h:outputText value="#{item.nome}"/>
+					</p:column>
+					
+			
+					<p:column headerText="Telefone">
+						<h:outputText value="#{item.telefone}" />
+					</p:column>	
+					
+					<p:column headerText="Cpf">
+						<h:outputText value="#{item.cpf}" />
+					</p:column>			
+
+					<p:column headerText="Endereço">
+						<h:outputText value="#{item.endereco}" />
+					</p:column>
+					
+					<p:column headerText="Data Nascimento">
+						<h:outputText value="#{item.dataNascimento}">
+							<f:convertDateTime  pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>	
+					
+					<p:column headerText="Data Cadastro">
+						<h:outputText value="#{item.dataCadastro}">
+							<f:convertDateTime  pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>	
+					
+					
+					<p:column headerText="Status">
+							<h:outputText value="Ativado" rendered="#{item.ativo}"/>
+							<h:outputText value="Desativado" rendered="#{!item.ativo}"/>
+					</p:column>	
+	
+					<p:column> 
+						 <p:commandButton value="Alterar" action="#{alunoBean.editar}"
+						  styleClass="btn_salvar" 
+						  oncomplete="PF('aluno').show();PF('tabResp').select(0);" 
+						  update=":formulario:mensagem,:formulario:gridAluno,:formulario:tabViewResponsaveis">
+            				  <f:setPropertyActionListener value="#{item}" target="#{alunoBean.entidade}" />						
+            			 </p:commandButton>
+					</p:column>
+											
+				</p:dataTable>
+
+			</p:panel>
+		</div>
+ 		
+	    	 <div class="dialog_admin_resp">
+			 <p:dialog header="Aluno"  widgetVar="aluno" id="aluno" resizable="true" style="height: auto;" modal="true" >  
+		   			
+		   		 			
+				<h:panelGrid columns="4" id="gridAluno">
+	
+					<h:column>
+						<h:outputFormat value="Cód aluno:" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{alunoBean.entidade.codigoAluno}" readonly="#{!empty alunoBean.entidade.codigoAluno}"/>
+					</h:column>	
+					
+					<h:column>
+						<h:outputFormat value="Nome:" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{alunoBean.entidade.nome}" />
+					</h:column>		
+	
+					<h:column>
+						<h:outputText value="Data Nascimento" />
+					</h:column>
+	
+					<h:column>
+						<p:calendar value="#{alunoBean.entidade.dataNascimento}"></p:calendar>
+					</h:column>
+					
+					<h:column>
+						<h:outputFormat value="Endereço" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{alunoBean.entidade.endereco}" />
+					</h:column>	
+					
+					<h:column>
+						<h:outputFormat value="Telefone" />
+					</h:column>
+	
+					<h:column>
+						<p:inputMask mask="(99)-99999-9999" size="20" value="#{alunoBean.entidade.telefone}" />
+					</h:column>						
+					
+					<h:column>
+						<h:outputFormat value="E-mail" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{alunoBean.entidade.email}" />
+					</h:column>	
+					
+					<h:column>
+						<h:outputText value="CPF"/>
+					</h:column>
+					
+					<h:column>
+						<p:inputMask mask="99999999999" value="#{alunoBean.entidade.cpf}"/>		
+					</h:column>					
+					
+					<h:column>
+						<h:outputText value="Status" />	
+					</h:column>
+					
+					<h:column>
+						<p:selectOneMenu value="#{alunoBean.entidade.ativo}">
+							<f:selectItem itemLabel="Ativado" itemValue="true"/>
+							<f:selectItem itemLabel="Desativado" itemValue="false"/>
+						</p:selectOneMenu>							
+					</h:column>
+					
+				</h:panelGrid>	
+				
+				<br/>
+				
+				<p:tabView id="tabViewResponsaveis" widgetVar="tabResp">
+						<p:tab title="Responsáveis" >
+						
+							<br/>
+							
+							<div align="left">
+								<p:commandButton value="Novo Responsavel" title="Novo Responsavel" action="#{alunoBean.novoResponsavel()}"
+								oncomplete="PF('responsavel').show()" update=":formulario:mensagem,:formulario:gridResponsavel"/>
+							</div>
+							
+							<br/>
+							<p:pickList id="pickListResp" value="#{alunoBean.responsaveis}"
+								converter="#{genericConverter}" var="responsavel"
+								iconOnly="true" itemValue="#{responsavel}"
+								itemLabel="#{responsavel.usuario} - #{responsavel.nome}">
+				
+								<f:facet name="sourceCaption">
+									<h:outputText value="Responsaveis não inclusos" />
+								</f:facet>
+								<f:facet name="targetCaption">
+									<h:outputText value="Responsaveis inclusos" />
+								</f:facet>
+							</p:pickList>
+						</p:tab>
+						<p:tab title="Classes" >
+							
+							<br/>
+							<p:pickList id="pickListClasses" value="#{alunoBean.classes}"
+								converter="#{genericConverter}" var="classe"
+								iconOnly="true" itemValue="#{classe}"
+								itemLabel="#{classe.nome} - #{classe.turma}">
+				
+								<f:facet name="sourceCaption">
+									<h:outputText value="Classes não inclusas" />
+								</f:facet>
+								<f:facet name="targetCaption">
+									<h:outputText value="Classes inclusas" />
+								</f:facet>
+							</p:pickList>
+						</p:tab>						
+				</p:tabView>					
+							
+	
+				<br />
+	
+				<p:commandButton value="#{msgs.cadastrar}" styleClass="btn_salvar" title="#{msgs.clique_cadastrar}!" action="#{alunoBean.salvarOuAtualizar()}" 
+				oncomplete="validarFecharModal(args,PF('aluno'))" update=":formulario:mensagem,:formulario:tabela"/>
+			    
+	    	 </p:dialog>
+	    	 </div>
+	    	 
+	    	 <div class="dialog_admin_resp">
+			 <p:dialog header="Responsável"  widgetVar="responsavel" id="responsavel" resizable="true" style="height: auto;" modal="true" >  
+		   			
+		   		 			
+				<h:panelGrid columns="4" id="gridResponsavel">
+	
+					<h:column>
+						<h:outputFormat value="#{msgs.usuario}" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{alunoBean.responsavel.usuario}"/>
+					</h:column>
+					
+					<h:column>
+						<h:outputFormat value="Senha" />
+					</h:column>
+	
+					<h:column>
+						<p:password size="20" value="#{alunoBean.responsavel.senha}" />
+					</h:column>					
+	
+					<h:column>
+						<h:outputFormat value="Nome:" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{alunoBean.responsavel.nome}" />
+					</h:column>
+					
+					<h:column>
+						<h:outputFormat value="Endereço" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{alunoBean.responsavel.endereco}" />
+					</h:column>	
+					
+					<h:column>
+						<h:outputFormat value="Telefone" />
+					</h:column>
+	
+					<h:column>
+						<p:inputMask mask="(99)-99999-9999" size="20" value="#{alunoBean.responsavel.telefone}" />
+					</h:column>						
+					
+					<h:column>
+						<h:outputFormat value="E-mail" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{alunoBean.responsavel.email}" />
+					</h:column>	
+					
+					<h:column>
+						<h:outputText value="CPF"/>
+					</h:column>
+					
+					<h:column>
+						<p:inputMask mask="99999999999" value="#{alunoBean.responsavel.cpf}"/>		
+					</h:column>
+					
+					<h:column>
+						<h:outputText value="RG"/>
+					</h:column>
+					
+					<h:column>
+						<p:inputMask mask="99.999.999.-*" value="#{alunoBean.responsavel.rg}"/>									
+					</h:column>														
+	
+					
+					<h:outputText value="Status" />	
+					<p:selectOneMenu value="#{alunoBean.responsavel.ativo}">
+						<f:selectItem itemLabel="ATIVADO" itemValue="true"/>
+						<f:selectItem itemLabel="DESATIVADO" itemValue="false"/>
+					</p:selectOneMenu>						
+				</h:panelGrid>	
+
+				<br />
+	
+				<p:commandButton value="#{msgs.cadastrar}" styleClass="btn_salvar" title="#{msgs.clique_cadastrar}!" action="#{alunoBean.salvarResponsavel()}" 
+				oncomplete="validarFecharModal(args,PF('responsavel'));PF('tabResp').select(0);" update=":formulario:mensagem,:formulario:tabViewResponsaveis"/>
+			    
+	    	 </p:dialog>	    	 	    	 
+			 </div>
+	
+		
+ </ui:define>
+ </ui:composition>
+</html>

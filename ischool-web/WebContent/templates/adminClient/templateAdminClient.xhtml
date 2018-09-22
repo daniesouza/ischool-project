@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+ 	  xmlns:p="http://primefaces.org/ui"> 
+
+ <h:head>
+   <title> #{msgs.sistema_ischool}</title>   
+   <h:outputScript name="util.js" library="js" target="head" />   
+ </h:head>
+ 
+ <f:view locale="#{localeBean.locale}">
+
+	<h:form id="formulario">
+		<h:body>		
+		
+			<!-- ##### CUSTOM STYLESHEET ##### -->
+			<f:facet name="last">
+				<h:outputStylesheet library="css" name="reset.css" />
+				<h:outputStylesheet library="css" name="adminClient.css" />
+				<h:outputStylesheet library="css" name="modals_adminClient.css" />
+			</f:facet>		
+		
+		<p:growl id="mensagem" showDetail="true"/>
+		<p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>  
+		
+		<p:dialog modal="true" widgetVar="statusDialog" header="Carregando..."  draggable="false" closable="false" resizable="false">  
+		    <p:graphicImage value="/resources/images/misc/ajaxloadingbar.gif" />  
+		</p:dialog> 
+		
+		<!-- 30 min -->
+		<p:idleMonitor timeout="1800000" onidle="PF('idleDialog').show()" />
+
+		<div class="popup_sessao">
+			<p:dialog header="Sua sessão expirou!" resizable="false"
+				draggable="false" closable="false" widgetVar="idleDialog"
+				modal="true" width="400">
+				<center>
+					<h2>
+						<h:outputText value="Você deve fazer o login novamente." />
+					</h2>
+					<br /> <br />
+					<div class="button_container">
+						<p:commandButton ajax="false" action="/paginas/public/home"
+							value="Fazer Login" styleClass="button_class btn_sessao" />
+					</div>
+				</center>
+			</p:dialog>
+		</div>
+		
+
+			<div>
+				
+				<!-- ###################### CABEÇALHO DA PAGINA ################ -->
+				
+				<div class="header">
+					<ui:include src="/templates/adminClient/cabecalho.xhtml"/> 	
+				</div>
+				
+				
+				<!-- ###################### MENU ################ -->
+				<div class="menu">
+					<ui:include src="/templates/adminClient/menu.xhtml" />
+				</div>					
+								
+			</div>
+			
+				<!-- ######################CORPO DA PAGINA DEFINIDO PELO UI:INSERT ################ -->
+			<div class="corpo" >
+				<ui:insert name="corpoPagina" />
+			</div>
+					
+					
+				<!-- ######################RODAPE ################ -->
+						
+		<!--	<div style="width: 99%">
+				<ui:include src="/templates/adminClient/rodape.xhtml"/>	
+			</div> -->
+								
+			<div id="footer">
+				<p>2015 iSchool - Todos os Direitos Reservados</p>
+			</div>
+		</h:body>
+	</h:form>
+	
+</f:view>
+</html>

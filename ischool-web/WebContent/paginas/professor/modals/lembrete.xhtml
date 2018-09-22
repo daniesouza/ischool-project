@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:dialog header="#{gerenciamentoAulaBean.entidade.evento.nome}"
+	widgetVar="modalLembrete" class="modalEventos" resizable="false"
+	draggable="false" width="430" style="height: auto;" modal="true">
+	<hr></hr>
+
+	<h:panelGrid columns="2"
+		rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoLembreteGenerico}">
+
+		<h:column>
+			<h:outputFormat value="Aluno:" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="#{gerenciamentoAulaBean.entidade.aluno.nome}"
+				rendered="#{!empty gerenciamentoAulaBean.entidade.aluno}"
+				styleClass="nome_aluno" />
+		</h:column>
+
+	</h:panelGrid>
+ 	
+	<div class="input_text_container">
+		<h:panelGrid
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoLembreteGenerico}">
+			<h:column>
+				<h:outputFormat value="Texto Livre para Lembrete" />
+			</h:column>
+			<h:column>
+				<p:inputTextarea rows="8" cols="50" counter="counter9"
+					maxlength="255"
+					readonly="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusCancelado}"
+					counterTemplate="{0} Caracteres Restantes." autoResize="true"
+					value="#{gerenciamentoAulaBean.entidade.observacoes}"></p:inputTextarea>
+				<br />
+				<h:outputText styleClass="text_counter" id="counter9" />
+			</h:column>
+		</h:panelGrid>
+	</div>
+
+	<br />
+	<br />
+	<div class="button_container">
+		<p:commandButton value="Salvar" title="clique para salvar"
+			action="#{gerenciamentoAulaBean.salvarOuAtualizar()}"
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoLembreteGenerico and gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusOk}"
+			disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk}"
+			oncomplete="validarFecharModal(args,PF('modalLembrete'))"
+			update=":formulario:mensagem,@(.alunoList#{gerenciamentoAulaBean.entidade.aluno.id})"
+			styleClass="button_class btn_salvar" />
+
+		<p:commandButton value="Cancelar" onclick="PF('confirmCancelarLembr').show()"
+			disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeNaoOk}"
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoLembreteGenerico and gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusOk}"
+			styleClass="button_class btn_apagar"></p:commandButton>
+	</div>
+</p:dialog>
+
+	<p:confirmDialog id="confirmCancelarLembr"
+		widgetVar="confirmCancelarLembr"
+		header="Iniciando processo de exclusão" severity="alert" width="400"
+		style="height: auto;" class="modalEventos">
+		<div class="apagar_registro">
+			<center>
+				<p:outputPanel style="position:relative;top:-20px">Tem certeza que deseja cancelar este evento?<br />
+					<br />
+				Esta ação não poderá ser desfeita.</p:outputPanel>
+				<br />
+				<div class="button_container">
+					<p:commandButton value="Sim"
+						oncomplete="PF('confirmCancelarLembr').hide();validarFecharModal(args,PF('modalLembrete'))"
+						action="#{gerenciamentoAulaBean.cancelarEventoExecutado()}"
+						update=":formulario:mensagem,@(.alunoList#{gerenciamentoAulaBean.entidade.aluno.id})"
+						rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoLembreteGenerico}"
+						styleClass="button_class btn_apagar" />
+					<p:commandButton value="Não" onclick="PF('confirmCancelarLembr').hide()"
+						rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoLembreteGenerico}"
+						type="button" styleClass="button_class btn_salvar" />
+				</div>
+			</center>
+		</div>
+	</p:confirmDialog>
+
+</html>

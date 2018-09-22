@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:dialog header="#{gerenciadorAlunoBean.entidade.evento.nome}"
+	widgetVar="modalFavorEnviar" class="modalEventos" resizable="false"
+	draggable="false" width="430" style="height: auto;" modal="true">
+	<hr></hr>
+	<h:panelGrid columns="2"
+		rendered="#{gerenciadorAlunoBean.entidade.tipo == gerenciadorAlunoBean.entidade.tipoLembrete}"
+		style="align:left">
+		<h:column>
+			<h:outputFormat value="Aluno:" />
+		</h:column> 
+
+		<h:column>
+			<h:outputFormat value="#{gerenciadorAlunoBean.entidade.aluno.nome}"
+				rendered="#{!empty gerenciadorAlunoBean.entidade.aluno}"
+				styleClass="nome_aluno" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Hora:" />
+		</h:column>
+		
+		<h:column>
+			<h:outputFormat value="#{gerenciadorAlunoBean.entidade.dataInicio}">
+				<f:convertDateTime  pattern="HH:mm"/>
+			</h:outputFormat>			
+		</h:column>			
+
+	</h:panelGrid>
+
+	<h:panelGrid style="align:left"
+		rendered="#{gerenciadorAlunoBean.entidade.tipo == gerenciadorAlunoBean.entidade.tipoLembrete}">
+		<h:column>
+			<p:selectBooleanCheckbox
+				disabled="true"
+				value="#{gerenciadorAlunoBean.entidade.enviarFralda}" />
+			<h:outputText value="Fraldas" styleClass="hora" />
+		</h:column>
+
+		<h:column>
+			<p:selectBooleanCheckbox
+				disabled="true"
+				value="#{gerenciadorAlunoBean.entidade.enviarLencos}" />
+			<h:outputText value="Lenços Umedecidos" />
+		</h:column>
+
+		<h:column>
+			<p:selectBooleanCheckbox
+				disabled="true"
+				value="#{gerenciadorAlunoBean.entidade.enviarPomada}" />
+			<h:outputText value="Pomada" />
+		</h:column>
+
+		<h:column>
+			<p:selectBooleanCheckbox
+				disabled="true"
+				value="#{gerenciadorAlunoBean.entidade.enviarLeite}" />
+			<h:outputText value="Leite" />
+		</h:column>
+
+	</h:panelGrid>
+	<div class="input_text_container">
+		<h:panelGrid
+			rendered="#{gerenciadorAlunoBean.entidade.tipo == gerenciadorAlunoBean.entidade.tipoLembrete}">
+			<h:column>
+				<h:outputFormat value="Outros" />
+			</h:column>
+			<h:column>
+				<p:inputTextarea rows="5" cols="50" counter="counter7"
+					maxlength="255"
+					readonly="true"
+					counterTemplate="{0} Caracteres Restantes." autoResize="true"
+					value="#{gerenciadorAlunoBean.entidade.enviarOutros}"></p:inputTextarea>
+				<br />
+				<h:outputText styleClass="text_counter" id="counter7" />
+			</h:column>
+		</h:panelGrid>
+
+		<h:panelGrid
+			rendered="#{gerenciadorAlunoBean.entidade.tipo == gerenciadorAlunoBean.entidade.tipoLembrete}">
+			<h:column>
+				<h:outputFormat value="Observações" />
+			</h:column>
+			<h:column>
+				<p:inputTextarea rows="8" cols="50" counter="counter8"
+					maxlength="255"
+					readonly="true"
+					counterTemplate="{0} Caracteres Restantes." autoResize="true"
+					value="#{gerenciadorAlunoBean.entidade.observacoes}"></p:inputTextarea>
+				<br />
+				<h:outputText styleClass="text_counter" id="counter8" />
+			</h:column>
+		</h:panelGrid>
+	</div>
+	<br />
+</p:dialog>
+
+
+</html>

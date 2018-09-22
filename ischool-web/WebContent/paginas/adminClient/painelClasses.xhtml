@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+ <ui:composition template="/templates/adminClient/templateAdminClient.xhtml">		
+  <ui:define name="corpoPagina">
+
+	<div class="corpo_container">
+		 <br/>
+		 <p:panel>  <h3 align="center"> Classes Cadastrados </h3> </p:panel> 
+ 
+		  <p:panel header="Filtros">  
+			<div align="center">
+			
+				<h:panelGrid columns="6" cellpadding="2">
+					
+					<h:outputText value="Nome" />
+					<p:inputText value="#{classeBean.filtro.nome}" />			
+
+					
+					<h:outputText value="Turma" />
+					<p:inputText value="#{classeBean.filtro.turma}"></p:inputText>	
+					
+					<h:outputText value="Status" />	
+					<p:selectOneMenu value="#{classeBean.filtro.ativo}">
+						<f:selectItem itemLabel="ATIVADO" itemValue="true"/>
+						<f:selectItem itemLabel="DESATIVADO" itemValue="false"/>
+					</p:selectOneMenu>							
+										
+						
+				</h:panelGrid>
+				<br/>
+		 			<p:commandButton value="Novo" 
+		 			action="#{classeBean.novoClasseCliente}" 
+		 			oncomplete="PF('classe').show();PF('tabProf').select(0);" 
+		 			styleClass="btn_salvar alileft"
+		 			update=":formulario:mensagem,:formulario:gridClasse,:formulario:tabViewProfessores"></p:commandButton>
+					<p:commandButton value="Buscar" styleClass="btn_salvar" action="#{classeBean.pesquisar()}" update=":formulario:mensagem,:formulario:tabela"></p:commandButton>
+				<br/>
+				<br/>
+			</div>
+		  </p:panel> 
+		 	 
+		  <p:panel id="tabela">
+									
+				<p:dataTable var="item" height="200" value="#{classeBean.classeDataModel}" lazy="true" emptyMessage="Não há registros na tabela"
+				paginator="true" rows="#{classeBean.registroPorPagina}" 
+				paginatorPosition="bottom" rowKey="#{item.id}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+				currentPageReportTemplate="Página {currentPage} de {totalPages} | {totalRecords} resultados" >					
+					
+									
+					<p:column headerText="Nome">
+							<h:outputText value="#{item.nome}"/>
+					</p:column>
+					
+			
+					<p:column headerText="Turma">
+						<h:outputText value="#{item.turma}" />
+					</p:column>				
+	
+					
+					<p:column headerText="Data Cadastro">
+						<h:outputText value="#{item.dataCadastro}">
+							<f:convertDateTime  pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>	
+					
+					<p:column headerText="Status">
+							<h:outputText value="Ativado" rendered="#{item.ativo}"/>
+							<h:outputText value="Desativado" rendered="#{!item.ativo}"/>
+					</p:column>						
+	
+					<p:column> 
+						 <p:commandButton value="Alterar" action="#{classeBean.editar}" oncomplete="PF('classe').show();PF('tabProf').select(0);" styleClass="btn_salvar"
+						 update=":formulario:mensagem,:formulario:gridClasse,:formulario:tabViewProfessores">
+            				  <f:setPropertyActionListener value="#{item}" target="#{classeBean.entidade}" />						
+            			 </p:commandButton>
+					</p:column>
+											
+				</p:dataTable>
+
+			</p:panel>
+
+ 		 </div>
+	    	 
+	    	 <div class="dialog_admin_resp">
+			 <p:dialog header="Classe"  widgetVar="classe" id="classe" resizable="true" style="height: auto;" modal="true" >  
+		   			
+		   		 			
+				<h:panelGrid columns="4" id="gridClasse">
+	
+
+					<h:column>
+						<h:outputFormat value="Nome:" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="25" value="#{classeBean.entidade.nome}" readonly="#{!empty classeBean.entidade.idClasse}"/>
+					</h:column>		
+					
+					<h:column>
+						<h:outputFormat value="Turma" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="25" value="#{classeBean.entidade.turma}" />
+					</h:column>	
+
+					
+					<h:column>
+						<h:outputText value="Status" />	
+					</h:column>
+					
+					<h:column>
+						<p:selectOneMenu value="#{classeBean.entidade.ativo}">
+							<f:selectItem itemLabel="Ativado" itemValue="true"/>
+							<f:selectItem itemLabel="Desativado" itemValue="false"/>
+						</p:selectOneMenu>							
+					</h:column>					
+					
+						
+				</h:panelGrid>	
+				
+				<br/>
+				<p:tabView id="tabViewProfessores" widgetVar="tabProf">
+						<p:tab title="Professores">
+							<br/>
+							<p:pickList id="pickListProf" value="#{classeBean.professores}"
+								converter="#{genericConverter}" var="professor"
+								iconOnly="true" itemValue="#{professor}"
+								itemLabel="#{professor.usuario} - #{professor.nome}">
+				
+								<f:facet name="sourceCaption">
+									<h:outputText value="Professores não inclusos" />
+								</f:facet>
+								<f:facet name="targetCaption">
+									<h:outputText value="Professores inclusos" />
+								</f:facet>
+							</p:pickList>
+						</p:tab>
+						<p:tab title="Alunos">
+							<br/>
+							<p:pickList id="pickListAlunos" value="#{classeBean.alunos}"
+								converter="#{genericConverter}" var="aluno"
+								iconOnly="true" itemValue="#{aluno}"
+								itemLabel="#{aluno.codigoAluno} - #{aluno.nome}">
+				
+								<f:facet name="sourceCaption">
+									<h:outputText value="Alunos não inclusas" />
+								</f:facet>
+								<f:facet name="targetCaption">
+									<h:outputText value="Alunos inclusas" />
+								</f:facet>
+							</p:pickList>
+						</p:tab>						
+				</p:tabView>					
+							
+	
+				<br />
+	
+				<p:commandButton value="#{msgs.cadastrar}" title="#{msgs.clique_cadastrar}!" 
+				action="#{classeBean.salvarOuAtualizar()}" styleClass="btn_salvar"
+				oncomplete="validarFecharModal(args,PF('classe'));PF('tabProf').select(0);" update=":formulario:mensagem,:formulario:tabela"/>
+			    
+	    	 </p:dialog>	    	 
+			</div>
+	
+		
+ </ui:define>
+ </ui:composition>
+</html>

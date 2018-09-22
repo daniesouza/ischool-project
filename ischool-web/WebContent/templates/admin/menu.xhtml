@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+ 	  xmlns:p="http://primefaces.org/ui"> 
+
+	     <p:menubar>           
+	     	 <p:menuitem value="Home"		  action="principal" 	 		 ajax="false" icon="ui-icon-home"></p:menuitem>     	
+	         <p:menuitem value="Escolas"      action="painelClientes" 	 ajax="false" immediate="true"></p:menuitem>  
+	         <p:menuitem value="Usuarios"  	  action="painelUsuarios" 	 ajax="false" immediate="true"></p:menuitem>
+	         <p:menuitem value="Cameras"      action="painelCameras" 	 ajax="false" immediate="true" ></p:menuitem>   
+	         
+	         <p:submenu label="Relatorios">                                                        
+		          <p:menuitem value="Logs" action="#" immediate="true" ajax="false" />		               				        	
+	         </p:submenu> 
+	         
+	     	  <p:submenu label="Configurações">                                                        
+		          <p:menuitem value="Tema" immediate="true"  action="#" ajax="false" />
+		          <p:menuitem value="Senha"  immediate="true" action="painelSenha"  ajax="false" />			               				        	
+	         </p:submenu>  		                 
+	     </p:menubar>  
+</html>

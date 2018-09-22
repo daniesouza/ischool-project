@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+ <ui:composition template="/templates/adminClient/templateAdminClient.xhtml">		
+  <ui:define name="corpoPagina">
+
+	 	<center>
+		 <p:panel>  <h3 align="center"> Configurações </h3> </p:panel> 
+		 
+ 
+		  <p:panel header="Escolha um tema">  
+		    	
+		    	<br/>
+
+		        <p:selectOneMenu  value="#{loginControllerBean.theme}" converter="#{iconeConverter}" panelStyle="width:250px" onchange="document.getElementById('formulario:btnTroca').click()"
+		                         effect="fade" var="p" style="width:160px"  filter="true" filterMatchMode="startsWith">  		           				        
+		            <f:selectItems value="#{themeSwitcherBean.listaTemas}" var="icone" itemLabel="#{icone.nome}" itemValue="#{icone}"/>
+    
+    				<p:column>  
+		                 <p:graphicImage value="/paginas/imagens/themes/#{p.imagem}" />  
+		            </p:column> 
+		                   			  
+		            <p:column>  
+		               #{p.nome}
+		            </p:column> 		  	            
+ 		         </p:selectOneMenu>
+ 		         
+ 		         <br/>
+
+		  </p:panel> 
+
+	     <p:commandButton actionListener="#{loginControllerBean.salvarTema()}" action="painelTema" ajax="false" id="btnTroca" style="display:none"/>
+
+		</center>
+	
+		
+ </ui:define>
+ </ui:composition>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>#{msgs.sistema_ischool}</title>
+
+	<h:outputScript name="util.js" library="js" target="head" />
+
+</h:head>
+
+
+<f:view locale="#{localeBean.locale}">
+
+	<h:form id="formulario">
+		<h:body>
+
+			<!-- ##### CUSTOM STYLESHEET ##### -->
+			<f:facet name="last">
+				<h:outputStylesheet library="css" name="reset.css" />
+				<h:outputStylesheet library="css" name="responsavel.css" />
+				<h:outputStylesheet library="css" name="modals_responsavel.css" />
+			</f:facet>
+
+			<h:outputFormat value="#{mensagemBean.notificacoes.size()}"
+				id="titleNotif" style="display:none" />
+			<p:remoteCommand name="recarregarTabela"
+				actionListener="#{mensagemBean.carregarMensagensAluno()}"
+				update=":formulario:tabelaMensagens" />
+			<p:growl id="mensagem" showDetail="true" />
+			<p:ajaxStatus onstart="PF('statusDialog').show();"
+				onsuccess="PF('statusDialog').hide();" />
+
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="Carregando..." draggable="false" closable="false"
+				resizable="false">
+				<p:graphicImage value="/resources/images/misc/ajaxloadingbar.gif" />
+			</p:dialog>
+
+			<!-- 30 min -->
+			<p:idleMonitor timeout="1800000" onidle="PF('idleDialog').show()" />
+
+			<div class="popup_sessao">
+				<p:dialog header="Sua sessão expirou!" resizable="false"
+					draggable="false" closable="false" widgetVar="idleDialog"
+					modal="true" width="400">
+					<center>
+						<h2>
+							<h:outputText value="Você deve fazer o login novamente." />
+						</h2>
+						<br /> <br />
+						<div class="button_container">
+							<p:commandButton ajax="false" action="/paginas/public/home"
+								value="Fazer Login" styleClass="button_class btn_sessao" />
+						</div>
+					</center>
+				</p:dialog>
+			</div>
+
+			<p:remoteCommand name="recarregarMensagens"
+				actionListener="#{mensagemBean.carregarMensagensAluno()}"
+				global="false" update=":formulario:tabelaMensagens"
+				oncomplete="setChatScrollToBottom();" />
+			<p:remoteCommand name="recarregarNotificacoes"
+				actionListener="#{mensagemBean.carregarNotificacoes()}" async="true"
+				global="false"
+				update=":formulario:gridAlertaMensagens,:formulario:menuGroup,:formulario:titleNotif"
+				oncomplete="document.title = document.getElementById('formulario:titleNotif').innerHTML == 0 ? '#{msgs.sistema_ischool}' : '#{msgs.sistema_ischool}' +' ('+ document.getElementById('formulario:titleNotif').innerHTML + ')'" />
+
+
+			<p:dialog widgetVar="dialogAlertMessages" showEffect="puff" 
+				hideEffect="puff" id="dialogAlertMessages" width="600" height="300"   styleClass="notificacaoTitulo curvar_pontas"
+				draggable="true" resizable="false" header="Central de notificações">
+				
+				<p:separator />
+				
+				<center>
+					<h:panelGrid id="gridAlertaMensagens">
+
+						<p:dataList value="#{mensagemBean.notificacoes}"
+							emptyMessage="Você não tem notificações" type="definition"
+							id="notificacao" styleClass="datalist-noborder" var="notificacao">
+
+							<div id="#{notificacao.aluno.id}" >
+								<p:commandLink
+									action="#{mensagemBean.carregarMensagensAluno(notificacao.aluno.id)}"
+									oncomplete="recarregarNotificacoes();PF('dialogMensagens').show();$(this).parent().remove();setChatScrollToBottom();PF('dialogAlertMessages').hide();"
+									update=":formulario:dialogMensagens">
+								<table class="hoverPop">
+									<tr>
+										<td width="40px"  style="vertical-align: middle;"><h:graphicImage	styleClass="pai-icon" value="/resources/images/messages/alerta/pai.png"	 title="Responsavel" /> </td>
+										<td width="200px" style="vertical-align: middle;"><h:outputText 	styleClass="notificacao-texto" value="#{notificacao.nomeRemetente}"/></td>
+										<td width="80px"  style="vertical-align: middle;"><h:graphicImage	styleClass="escola-icon" value="/resources/images/messages/alerta/escola.png" title="Classe" /></td>
+										<td width="100px" style="vertical-align: middle;"><h:outputText 	styleClass="notificacao-texto" value="#{notificacao.nomeClasse}" /></td>
+										<td width="60px"  style="vertical-align: middle;"><h:graphicImage	value="/resources/images/messages/alerta/aluno.png"  title="Aluno" /></td>
+										<td width="100px" style="vertical-align: middle;"><h:outputText 	styleClass="notificacao-texto" value="#{notificacao.aluno.nome}" /></td>
+										<td width="100px" style="vertical-align: middle;"><h:outputText 	styleClass="counter_class"	value="#{notificacao.quantidadeNotificacoes}" /></td>										
+									</tr>
+								</table>
+								</p:commandLink>
+								<p:separator/>								
+							</div>
+
+						</p:dataList>
+					</h:panelGrid>
+				</center>
+			</p:dialog>
+			
+			
+
+			<div>
+				<!-- ###################### CABEÇALHO DA PAGINA ################ -->
+			
+				<div class="header">
+					<ui:include src="/templates/responsavel/cabecalho.xhtml" />
+				</div>
+				
+			<!--	<p:cache region="cache" key="headerMenu"> -->
+
+				<!-- ###################### MENU ################ -->
+				<div class="menu">
+					<ui:include src="/templates/responsavel/menu.xhtml" />
+				</div>
+				
+			<!--	</p:cache> -->
+			
+			</div>
+			
+
+			<!-- ######################CORPO DA PAGINA DEFINIDO PELO UI:INSERT ################ -->
+			<div class="corpo">
+				<ui:insert name="corpoPagina" />
+			</div>
+
+
+			<!-- ######################RODAPE ################ -->
+
+			<!-->div style="width: 99%">
+						<ui:include src="/templates/professor/rodape.xhtml" />
+					</div-->
+
+			<ui:include src="/paginas/responsavel/modals/mensagem.xhtml" />
+
+			<script type="text/javascript">
+				
+					function abrirPopUps(tipo){
+			
+						if(tipo == 1){
+							PF('modalInformativo').show();
+						}
+						else if(tipo == 2){
+							PF('modalInicioFim').show();
+						}
+						else if(tipo == 3){
+							PF('modalAlimento').show();
+						}
+						else if(tipo == 4){
+							PF('modalEvacuacao').show();
+						}
+						else if(tipo == 5){
+							PF('modalMedicamento').show();
+						}
+						else if(tipo == 6){
+							PF('modalFavorEnviar').show();
+						}else if(tipo == 7){
+							PF('modalLembrete').show();
+						}
+			
+			
+					}
+
+			
+					function handleMessagesDialog(idAlunoMessage){
+						  
+			              var dialogMessagesOpen = document.getElementById("formulario:dialogMessagesOpen").value;
+			     		              
+			              if(dialogMessagesOpen === 'true'){
+
+				              var idAlunoSelecionado = document.getElementById("formulario:idAlunoSelecionado").value;
+			            	  
+				              if(idAlunoMessage == idAlunoSelecionado){
+
+					              console.log("MOSTROU MENSAGEM ");
+				            	  recarregarMensagens();
+					          }	
+				              else{
+				            	  recarregarNotificacoes();	
+				            	  console.log("MOSTROU NOTIFICACOES");
+						      }
+
+			              }else{
+							  recarregarNotificacoes();				            	  						 					 		
+
+			            	  console.log("MOSTROU NOTIFICACOES");
+				          }
+					} 
+						
+			
+					function openDialogAlert() {
+
+					//	var x = (window.screen.width*0.60);
+					//	var y = (window.screen.height*0.12);
+			
+					//	PF('dialogAlertMessages').cfg.position = x+','+y;
+
+						PF('dialogAlertMessages').show();
+					}
+
+					function setChatScrollToBottom(){
+						$('.ui-scrollpanel').scrollTop(100000);
+					}
+	
+				 	 var ws;
+					 $( document ).ready( function() {
+					
+					    if (!window.WebSocket) {
+					        alert("FATAL: WebSocket não é suportado por este navegador. A página não irá funcionar corretamente!");
+					    }
+					
+					    if(!ws){
+						    console.log("carregou Socket");
+						    ws = new WebSocket("#{mensagemBean.ipConexaoWebSocket}");
+						}
+					
+					    ws.onopen = function() {        
+					       ws.send("#{mensagemBean.hashUsuarioLogado}");
+					    };
+					    
+					    ws.onmessage = function(message) {
+							console.log("RECEBEU MENSAGEM");
+							handleMessagesDialog(message.data);				    	
+					    };
+					    
+					    ws.onclose = function() {
+					    	console.log("DESCONECTOU");
+					        ws = null;
+					    };
+
+					    ws.onerror = function() {
+					    	console.log("FATAL: Falha na conexão com o servidor. A página não irá funcionar corretamente!");
+					    	alert("FATAL: Falha na conexão com o servidor. A página não irá funcionar corretamente!");
+					        ws = null;
+					    };
+				 
+
+					   setTimeout(function(){
+						   recarregarNotificacoes();
+						}, 200);
+					});		
+
+
+					function enviarMsg(){
+
+						var value = document.getElementById('formulario:textoMsg').value;
+						var btn   = document.getElementById('formulario:btnEnviar');
+
+						if(value.trim().length > 0){
+
+							if(event.keyCode == 13){ 
+								btn.click();
+							}
+						}
+
+					}						
+			
+				 </script>
+
+
+			<div id="footer">
+				<p>2015 iSchool - Todos os Direitos Reservados</p>
+			</div>
+		</h:body>
+	</h:form>
+</f:view>
+</html>

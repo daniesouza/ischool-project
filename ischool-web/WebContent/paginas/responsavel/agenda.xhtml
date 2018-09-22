@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+       <style type="text/css">.ui-widget {font-size: 13px !important;}</style> 
+    
+        <title>AGENDA</title>
+        
+          <style type="text/css">
+			  .alignTop {
+				vertical-align: top;
+				}
+		  </style>
+    </h:head>
+    <h:body>
+ 
+ <h:form id="formAgenda">
+   <p:commandLink onclick="$(this).css('display','none');setTimeout(function(){document.getElementById('formAgenda:imprimir').style.display = 'inline';},200);" id="imprimir"  
+   oncomplete="javascript:window.print();">
+   		<h:graphicImage  value="/resources/images/agenda/btn_print.png" />  
+   </p:commandLink> 
+  
+	<center>
+		
+        <p:dataGrid  value="#{historicoBean.listaAlunosClasse}" var="aluno" columns="1" id="agenda">
+            <h:column>
+                    <div align="center" ><b>AGENDA DO DIA</b></div>
+
+                    <div align="center">
+                       <b> <span>Data: </span></b>
+                        <h:outputText value="#{historicoBean.dataSelecionada}">
+                            <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+                        </h:outputText>  
+                        <span>- </span>
+                        <b><span>Aluno: </span></b>
+                        <h:outputText value="#{aluno.nome}"/>
+                    </div>
+                    
+                    <h:panelGrid columns="3" width="100%" columnClasses="alignTop,alignTop,alignTop">
+                    	<h:column>
+                    		<div align="center"><b>Eventos</b></div>
+		                    <p:dataGrid value="#{aluno.eventosExecutados}" columns="1" var="eventos" cellpadding="1" border="0">                	
+		                            
+		                            <p:column rendered="#{eventos.tipo == eventos.tipoInformativo}">
+		                               	<table>
+		                               		<tr>
+		                               			<td>
+		                               				<h:graphicImage value="/resources/images/event/icon/#{eventos.evento.icone}" width="30" height="30" />                          				
+		                               			</td>
+		                               			<td>
+		                               				<b><span>#{eventos.evento.nome}</span> </b><br />                            				
+		                               			</td>
+		                               		</tr>
+		                               	</table>
+		                               	
+		                                <b><span>Data e hora: </span></b><h:outputText value="#{eventos.dataInicio}"><f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm"/></h:outputText><br />
+		                                <b><span>#{eventos.evento.unidadeMedida}: </span></b> <h:outputText value="#{eventos.quantidade}"/><br/>
+		                                <b><span>Observações : </span></b>  <h:outputText value="#{eventos.observacoes}"> </h:outputText>                                                                  
+									</p:column>  
+									
+		                        	<p:column rendered="#{eventos.tipo == eventos.tipoInicioFim}">
+		                               	<table>
+		                             		<tr>
+		                             			<td>
+		                             				<h:graphicImage value="/resources/images/event/icon/#{eventos.evento.icone}" width="20" height="30" />                          				
+		                             			</td>
+		                             			<td>
+		                               				<b><span>#{eventos.evento.nome}</span> </b><br />                            				
+		                             			</td>
+		                             		</tr>
+		                             	</table>
+		                                 <b><span>Inicio: </span></b><h:outputText value="#{eventos.dataInicio}"><f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm"/></h:outputText><br />
+		                                 <b><span>Fim: </span></b><h:outputText value="#{eventos.dataFim}"><f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm"/></h:outputText><br />
+		                                 <b><span>Observações : </span></b>  <h:outputText value="#{eventos.observacoes}"> </h:outputText>                                                                   
+									</p:column>	
+									
+		                        	<p:column rendered="#{eventos.tipo == eventos.tipoAlimento}">
+		                             	<table>
+		                             		<tr>
+		                             			<td>
+		                             				<h:graphicImage value="/resources/images/event/icon/#{eventos.evento.icone}" width="30" height="30" />                          				
+		                             			</td>
+		                             			<td>
+		                               				<b><span>#{eventos.evento.nome}</span> </b><br />                            				
+		                             			</td>
+		                             		</tr>
+		                             	</table>
+		                                 <b><span>Hora: </span></b><h:outputText value="#{eventos.dataInicio}"><f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm"/></h:outputText><br />
+		                                 <b><span>Como Foi? : </span></b>
+		                                 	<h:outputText value="Otimo" 	  rendered="#{eventos.avaliacaoEvento == 1}"> </h:outputText>
+		                                 	<h:outputText value="Bom" 		  rendered="#{eventos.avaliacaoEvento == 2}"> </h:outputText>
+		                                 	<h:outputText value="Pouco" 	  rendered="#{eventos.avaliacaoEvento == 3}"> </h:outputText>
+		                                 	<h:outputText value="Não Aceitou" rendered="#{eventos.avaliacaoEvento == 4}"> </h:outputText>                                  
+		                                 <br />
+		                                <b> <span>Observações : </span></b>  <h:outputText value="#{eventos.observacoes}"> </h:outputText>                                 
+									</p:column>	
+									
+		                        	<p:column rendered="#{eventos.tipo == eventos.tipoEvacuacao}">
+			                           	<table>
+			                           		<tr>
+			                           			<td>
+			                           				<h:graphicImage value="/resources/images/event/icon/#{eventos.evento.icone}" width="20" height="30" />                          				
+			                           			</td>
+			                           			<td>
+		                               				<b><span>#{eventos.evento.nome}</span> </b><br />                            				
+			                           			</td>
+			                           		</tr>
+			                           	</table>
+			                            <b><span>Hora: </span></b><h:outputText value="#{eventos.dataInicio}"><f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm"/></h:outputText><br />
+			                            <b><span>Como Foi? : </span></b>
+			                            <h:outputText value="Normal" 	 rendered="#{eventos.avaliacaoEvento == 1}"> </h:outputText>
+			                            <h:outputText value="Molinho" 	 rendered="#{eventos.avaliacaoEvento == 2}"> </h:outputText>   <br /> 
+			                            
+			                            <b><span>Tomou Banho? : </span></b>
+			                            <h:outputText value="Sim" 	 rendered="#{eventoTarde.tomouBanho}"> </h:outputText>
+			                            <h:outputText value="Não" 	 rendered="#{!eventoTarde.tomouBanho}"> </h:outputText>   <br /> 
+			                            			                                                        	                                   
+			                            <b><span>Observações : </span></b>  <h:outputText value="#{eventos.observacoes}"> </h:outputText>                                      
+									</p:column>	
+									
+		                        	<p:column rendered="#{eventos.tipo == eventos.tipoMedicamento}">
+		                             	<table>
+		                             		<tr>
+		                             			<td>
+		                             				<h:graphicImage value="/resources/images/event/icon/#{eventos.evento.icone}" width="30" height="30" />                          				
+		                             			</td>
+		                             			<td>
+		                               				<b><span>#{eventos.evento.nome}</span> </b><br />                            				
+		                             			</td>
+		                             		</tr>
+		                             	</table>
+		                                 <b><span>Hora: </span></b><h:outputText value="#{eventos.dataInicio}"><f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm"/></h:outputText><br />
+		                                 <b><span>Medicamento : </span></b><h:outputText value="#{eventos.medicamentos}"> </h:outputText> <br />                                  
+		                                 <b><span>Observações : </span></b><h:outputText value="#{eventos.observacoes}"> </h:outputText>                                                                     
+									</p:column>	
+									
+		                        	<p:column rendered="#{eventos.tipo == eventos.tipoLembrete}">
+		                             	<table>
+		                             		<tr>
+		                             			<td>
+		                             				<h:graphicImage value="/resources/images/event/icon/#{eventos.evento.icone}" width="30" height="30" />                          				
+		                             			</td>
+		                             			<td>
+		                               				<b><span>#{eventos.evento.nome}</span> </b><br />                            				
+		                             			</td>
+		                             		</tr>
+		                             	</table>
+		                                 <b><span>Fraldas: </span></b><h:outputText value="Não" rendered="#{!eventos.enviarFralda}"/> <h:outputText value="Sim" rendered="#{eventos.enviarFralda}" /><br/>
+		                                 <b><span>Leite :  </span></b><h:outputText  value="Não" rendered="#{!eventos.enviarLeite}"/> <h:outputText value="Sim" rendered="#{eventos.enviarLeite}" /> <br />                                  
+		                                 <b><span>Lenços : </span></b><h:outputText value="Não" rendered="#{!eventos.enviarLencos}"/> <h:outputText value="Sim" rendered="#{eventos.enviarLencos}" /> <br />
+		                                 <b><span>Pomada : </span></b><h:outputText value="Não" rendered="#{!eventos.enviarPomada}"/> <h:outputText value="Sim" rendered="#{eventos.enviarPomada}" /> <br />
+		                                 <b><span>Outros : </span></b><h:outputText value="#{eventos.enviarOutros}" />                                                                                                                                                                          
+									</p:column>																																	
+		                    </p:dataGrid>
+                 
+		                 </h:column>
+		                 
+                                                   
+                    </h:panelGrid>                    
+                    
+            </h:column>
+        </p:dataGrid>
+        
+	</center>        
+	</h:form>
+    </h:body>
+    
+</html>
+

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:dialog header="#{gerenciadorAlunoBean.entidade.evento.nome}"
+	widgetVar="modalEvacuacao" class="modalEventos" resizable="false"
+	draggable="false" width="430" modal="true">
+	<hr></hr>
+	<h:panelGrid columns="2"
+		rendered="#{gerenciadorAlunoBean.entidade.tipo == gerenciadorAlunoBean.entidade.tipoEvacuacao}">
+		<h:column>
+			<h:outputFormat value="Aluno:" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="#{gerenciadorAlunoBean.entidade.aluno.nome}"
+				rendered="#{!empty gerenciadorAlunoBean.entidade.aluno}"
+				styleClass="nome_aluno" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Hora da Evacuação:" />
+		</h:column>
+
+		
+		<h:column>
+			<h:outputFormat value="#{gerenciadorAlunoBean.entidade.dataInicio}">
+				<f:convertDateTime  pattern="HH:mm"/>
+			</h:outputFormat>			
+		</h:column>		
+
+		<h:column>
+			<h:outputFormat value="Como foi a Evacuação	?" />
+		</h:column>
+
+		<h:column>
+			<p:selectOneMenu 
+				disabled="true"
+				value="#{gerenciadorAlunoBean.entidade.avaliacaoEvento}"
+				styleClass="hora">
+				<f:selectItem itemLabel="Normal" itemValue="1" />
+				<f:selectItem itemLabel="Molinho" itemValue="2" />
+			</p:selectOneMenu>
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Tomou Banho?" />
+		</h:column>
+
+		<h:column>
+			<p:selectOneMenu
+				disabled="true"
+				value="#{gerenciadorAlunoBean.entidade.tomouBanho}"
+				styleClass="hora">
+				<f:selectItem itemLabel="Não" itemValue="0" />
+				<f:selectItem itemLabel="Sim" itemValue="1" />
+			</p:selectOneMenu>
+		</h:column>
+
+	</h:panelGrid>
+
+	<h:panelGrid
+		rendered="#{gerenciadorAlunoBean.entidade.tipo == gerenciadorAlunoBean.entidade.tipoEvacuacao}">
+		<h:column>
+			<h:outputFormat value="Observações" />
+		</h:column>
+		<h:column>
+			<p:inputTextarea rows="8" cols="50" counter="counter4"
+				maxlength="255"
+				readonly="true"
+				counterTemplate="{0} Caracteres Restantes." autoResize="true"
+				value="#{gerenciadorAlunoBean.entidade.observacoes}"></p:inputTextarea>
+			<br />
+			<h:outputText styleClass="text_counter" id="counter4" />
+		</h:column>
+	</h:panelGrid>
+	
+	<br />
+	
+
+</p:dialog>
+
+
+</html>

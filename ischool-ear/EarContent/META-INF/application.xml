@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd" version="6">
+  <display-name>ischool-ear</display-name>
+  <module>
+    <web>
+      <web-uri>ischool-web.war</web-uri>
+      <context-root>ischool-web</context-root>
+    </web>
+  </module>
+  <module>
+    <ejb>ischool-service-impl.jar</ejb>
+  </module>
+  <module>
+    <ejb>ischool-webservice.jar</ejb>
+  </module>
+</application>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd 
+						http://www.springframework.org/schema/security 
+						http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+
+	<sec:http auto-config="true" access-denied-page="/negado.jsf">
+		<sec:intercept-url pattern="/paginas/admin/**" access="ROLE_ADMIN"/>
+		<sec:intercept-url pattern="/paginas/adminClient/**" access="ROLE_ADMIN_CLIENT" />
+		<sec:intercept-url pattern="/paginas/professor/**" access="ROLE_PROFESSOR"/>
+		<sec:intercept-url pattern="/paginas/responsavel/**" access="ROLE_RESPONSAVEL"/>
+		<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 
+		<sec:form-login login-page="/paginas/public/home.jsf" 
+			default-target-url="/security.jsp" 
+			always-use-default-target="true"
+			authentication-failure-url="/paginas/public/home.jsf" />
+		<sec:logout invalidate-session="true" logout-success-url="/paginas/public/home.jsf"/>
+		<sec:remember-me/>
+		
+<!-- 	<sec:session-management> 
+	        <sec:concurrency-control max-sessions="1"  error-if-maximum-exceeded="true" />
+	    </sec:session-management>	-->	
+	    
+	</sec:http>
+	
+<!-- 	<sec:authentication-manager> -->
+	    	    
+<!-- 	    <sec:authentication-provider> -->
+<!-- 	    	<sec:password-encoder hash="md5"/> -->
+<!-- 	        <sec:jdbc-user-service data-source-ref="dataSource" -->
+<!-- 	            users-by-username-query="SELECT usuario, senha, 'true' as enable FROM usuario WHERE usuario=?" -->
+<!-- 	            authorities-by-username-query="SELECT usuario, autoridade FROM usuario us -->
+<!-- 				left join cliente cli on us.id_cliente=cli.id_cliente  -->
+<!-- 	            WHERE us.usuario=? and us.ativo=true -->
+<!-- 				and (us.id_cliente is null or cli.ativo = true)" /> -->
+<!-- 	    </sec:authentication-provider> -->
+	    	    
+<!-- 	</sec:authentication-manager> -->
+
+<!--     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> -->
+<!-- 	    <property name="driverClassName" value="com.mysql.jdbc.Driver" /> -->
+<!-- 		<property name="url" value="jdbc:mysql://localhost:3306/ischool" /> -->
+<!-- 		<property name="username" value="root" /> -->
+<!-- 		<property name="password" value="root" /> -->
+<!--     </bean> -->
+    
+	<sec:authentication-manager>
+		<sec:authentication-provider ref="customAuthenticationProvider">
+				<sec:password-encoder hash="md5"/>
+		</sec:authentication-provider>		
+	</sec:authentication-manager>
+
+     <bean id="customAuthenticationProvider" class="br.com.ischool.controller.authentication.CustomAuthenticationProvider">
+    </bean>
+     
+</beans>

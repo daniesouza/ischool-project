@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:dialog header="#{gerenciamentoAulaBean.entidade.evento.nome}"
+	widgetVar="modalEvacuacao" class="modalEventos" resizable="false"
+	draggable="false" width="430" style="height: auto;" modal="true">
+	<hr></hr>
+	<h:panelGrid columns="2"
+		rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoEvacuacao}">
+		<h:column>
+			<h:outputFormat value="Aluno:" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="#{gerenciamentoAulaBean.entidade.aluno.nome}"
+				rendered="#{!empty gerenciamentoAulaBean.entidade.aluno}"
+				styleClass="nome_aluno" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Hora da Evacuação:" />
+		</h:column>
+
+		<h:column>
+			<p:calendar value="#{gerenciamentoAulaBean.entidade.dataInicio}"
+				disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusCancelado}"
+				pattern="HH:mm" timeOnly="true" styleClass="hora" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Como foi a Evacuação	?" />
+		</h:column>
+
+		<h:column>
+			<p:selectOneMenu
+				disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusCancelado}"
+				value="#{gerenciamentoAulaBean.entidade.avaliacaoEvento}"
+				styleClass="hora">
+				<f:selectItem itemLabel="Normal" itemValue="1" />
+				<f:selectItem itemLabel="Molinho" itemValue="2" />
+			</p:selectOneMenu>
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Tomou Banho?" />
+		</h:column>
+
+		<h:column>
+			<p:selectOneMenu
+				disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusCancelado}"
+				value="#{gerenciamentoAulaBean.entidade.tomouBanho}"
+				styleClass="hora">
+				<f:selectItem itemLabel="Não" itemValue="0" />
+				<f:selectItem itemLabel="Sim" itemValue="1" />
+			</p:selectOneMenu>
+		</h:column>
+
+	</h:panelGrid>
+
+	<h:panelGrid
+		rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoEvacuacao}">
+		<h:column>
+			<h:outputFormat value="Observações" />
+		</h:column>
+		<h:column>
+			<p:inputTextarea rows="8" cols="50" counter="counter4"
+				maxlength="255"
+				readonly="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusCancelado}"
+				counterTemplate="{0} Caracteres Restantes." autoResize="true"
+				value="#{gerenciamentoAulaBean.entidade.observacoes}"></p:inputTextarea>
+			<br />
+			<h:outputText styleClass="text_counter" id="counter4" />
+		</h:column>
+	</h:panelGrid>
+
+	<br />
+	<br />
+	<div class="button_container">
+		<p:commandButton value="salvar" title="clique para salvar"
+			action="#{gerenciamentoAulaBean.salvarOuAtualizar()}"
+			disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk}"
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoEvacuacao and gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusOk}"
+			oncomplete="validarFecharModal(args,PF('modalEvacuacao'))"
+			update=":formulario:mensagem,@(.alunoList#{gerenciamentoAulaBean.entidade.aluno.id})"
+			styleClass="button_class btn_salvar" />
+
+		<p:commandButton value="Cancelar" onclick="PF('confirmCancelarEvac').show()"
+			disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeNaoOk}"
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoEvacuacao and gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusOk}"
+			styleClass="button_class btn_apagar"></p:commandButton>
+	</div>
+</p:dialog>
+
+
+	<p:confirmDialog id="confirmCancelarEvac"
+		widgetVar="confirmCancelarEvac"
+		header="Iniciando processo de exclusão" severity="alert" width="400"
+		style="height: auto;" class="modalEventos">
+		<div class="apagar_registro">
+			<center>
+				<p:outputPanel style="position:relative;top:-20px">Tem certeza que deseja cancelar este evento?<br />
+					<br />
+				Esta ação não poderá ser desfeita.</p:outputPanel>
+				<br />
+				<div class="button_container">
+					<p:commandButton value="Sim"
+						rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoEvacuacao}"
+						oncomplete="PF('confirmCancelarEvac').hide();validarFecharModal(args,PF('modalEvacuacao'))"
+						action="#{gerenciamentoAulaBean.cancelarEventoExecutado()}"
+						update=":formulario:mensagem,@(.alunoList#{gerenciamentoAulaBean.entidade.aluno.id})" 
+						styleClass="button_class btn_apagar" />
+					<p:commandButton value="Não" onclick="PF('confirmCancelarEvac').hide()"
+						type="button" styleClass="button_class btn_salvar"
+						rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoEvacuacao}" />
+				</div>
+			</center>
+		</div>
+	</p:confirmDialog>
+
+
+</html>

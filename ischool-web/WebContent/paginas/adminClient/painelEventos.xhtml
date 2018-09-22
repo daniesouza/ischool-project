@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+
+ <ui:composition template="/templates/adminClient/templateAdminClient.xhtml">		
+  <ui:define name="corpoPagina">
+
+	<div class="corpo_container">
+		 <br/>
+		 <p:panel>  <h3 align="center"> Eventos Cadastrados </h3> </p:panel> 
+		  
+		  <p:panel header="Filtros">  
+			  <div align="center">
+				<h:panelGrid columns="8" cellpadding="2">
+					
+					<h:outputText value="Cód. Evento" />
+					<p:inputText value="#{eventoBean.filtro.codigoEvento}" />	
+					
+					<h:outputText value="Nome" />
+					<p:inputText value="#{eventoBean.filtro.nome}"/>											
+					
+					<h:outputText value="Data Cadastro" />
+					<p:calendar value="#{eventoBean.filtro.dataCadastro}"></p:calendar>	
+					
+					<h:outputText value="Status" />	
+					<p:selectOneMenu value="#{eventoBean.filtro.ativo}">
+						<f:selectItem itemLabel="ATIVADO" itemValue="true"/>
+						<f:selectItem itemLabel="DESATIVADO" itemValue="false"/>
+					</p:selectOneMenu>						
+										
+				</h:panelGrid>
+				<br/>
+				
+		 		<p:commandButton value="Novo" 
+		 			action="#{eventoBean.novoEventoCliente}" 
+		 			oncomplete="PF('evento').show()" 
+		 			update=":formulario:mensagem,:formulario:gridEvento"
+		 			styleClass="btn_salvar alileft"></p:commandButton>
+		 							
+				<p:commandButton value="Buscar" styleClass="btn_salvar" actionListener="#{eventoBean.pesquisar()}" update=":formulario:mensagem,:formulario:tabela" ></p:commandButton>
+				<br/>
+				<br/>
+			  </div>
+		  </p:panel> 
+		 	 
+		  <p:panel id="tabela">
+									
+				<p:dataTable var="item" height="200" value="#{eventoBean.eventoDataModel}" lazy="true" emptyMessage="Não há registros na tabela"
+				paginator="true" rows="#{eventoBean.registroPorPagina}" 
+				paginatorPosition="bottom" rowKey="#{item.id}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+				currentPageReportTemplate="Página {currentPage} de {totalPages} | {totalRecords} resultados" >					
+									
+					<p:column headerText="Código">
+							<h:outputText value="#{item.codigoEvento}"/>
+					</p:column>
+					
+					<p:column headerText="Nome">
+							<h:outputText value="#{item.nome}"/>
+					</p:column>
+					
+					<p:column headerText="Data Cadastro">
+						<h:outputText value="#{item.dataCadastro}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					
+					<p:column headerText="Icone">  
+		                 <p:graphicImage value="/resources/images/event/icon/#{item.icone}" width="40" height="40" />  
+		            </p:column>	
+		            
+					<p:column headerText="Status">
+							<h:outputText value="Ativado" rendered="#{item.ativo}"/>
+							<h:outputText value="Desativado" rendered="#{!item.ativo}"/>
+					</p:column>			            
+										
+					<p:column headerText="Ação"> 
+						 <p:commandButton value="Alterar" action="#{eventoBean.editar}" oncomplete="PF('evento').show()" 
+						 styleClass="btn_salvar"
+						 update=":formulario:mensagem,:formulario:gridEvento" 
+						 rendered="#{!item.preCadastro}">
+            				  <f:setPropertyActionListener value="#{item}" target="#{eventoBean.entidade}" />						
+            			 </p:commandButton>
+					</p:column>
+											
+				</p:dataTable>
+
+			</p:panel>
+		</div>
+ 		 
+	    	 <div class="dialog_admin_resp">
+			 <p:dialog header="Evento"  widgetVar="evento" id="evento" resizable="true" style="height: auto;" modal="true" >  
+		   			
+		   		 			
+				<h:panelGrid columns="4" id="gridEvento">
+				
+					<h:column>
+						<h:outputFormat value="Código Evento:" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{eventoBean.entidade.codigoEvento}" readonly="#{!empty eventoBean.entidade.idEvento}" />
+					</h:column>
+	
+					<h:column>
+						<h:outputFormat value="Nome:" />
+					</h:column>
+	
+					<h:column>
+						<p:inputText size="20" value="#{eventoBean.entidade.nome}" />
+					</h:column>
+										
+					<h:column>
+				    	<h:outputText value="Icone *:" />  
+				    </h:column>
+				    
+				    <h:column>
+				        <p:selectOneMenu value="#{eventoBean.iconeSelecionado}" panelStyle="width:150px"  converter="#{iconeConverter}"
+				                         effect="fade" var="p" style="width:160px"  filter="true" filterMatchMode="startsWith">  
+				           				        
+				            <f:selectItems value="#{eventoBean.listaIcones}" var="icone" itemLabel="#{icone.nome}" itemValue="#{icone}"/>
+				           			  	            
+							<p:column>  
+				                 <p:graphicImage value="/resources/images/event/icon/#{p.imagem}" width="40" height="50" />  
+				            </p:column>  
+				  
+				            <p:column>  
+				               #{p.nome}
+				            </p:column> 
+	
+				        </p:selectOneMenu>
+			        </h:column> 
+			        
+					<h:column>
+						<h:outputText value="Unid. Medida" />	
+					</h:column>
+					
+					<h:column>
+						<p:selectOneMenu value="#{eventoBean.entidade.unidadeMedida}">
+							<f:selectItem itemLabel="Ml - MiliLitros" itemValue="ml"/>
+							<f:selectItem itemLabel="Gr - Gramas" itemValue="gr"/>
+							<f:selectItem itemLabel="Min - Minutos" itemValue="min"/>
+							<f:selectItem itemLabel="Qtde - Quantidade" itemValue="qtde"/>
+						</p:selectOneMenu>							
+					</h:column>
+					
+					<h:column>
+						<h:outputText value="Tipo Evento" />	
+					</h:column>
+					
+					<h:column>
+						<p:selectOneMenu value="#{eventoBean.entidade.tipo}">
+							<f:selectItem itemLabel="Informativo" itemValue="#{eventoBean.entidade.tipoInformativo}"/>
+							<f:selectItem itemLabel="Inicio-Fim"  itemValue="#{eventoBean.entidade.tipoInicioFim}"/>
+						</p:selectOneMenu>							
+					</h:column>						
+					
+					<h:column>
+						<h:outputText value="Status" />	
+					</h:column>
+					
+					<h:column>
+						<p:selectOneMenu value="#{eventoBean.entidade.ativo}">
+							<f:selectItem itemLabel="Ativado" itemValue="true"/>
+							<f:selectItem itemLabel="Desativado" itemValue="false"/>
+						</p:selectOneMenu>							
+					</h:column>								        												
+										
+				</h:panelGrid>		
+							
+	
+				<br />
+	
+				<p:commandButton value="#{msgs.cadastrar}" styleClass="btn_salvar" title="#{msgs.clique_cadastrar}!" actionListener="#{eventoBean.salvarOuAtualizar()}" 
+				oncomplete="validarFecharModal(args,PF('evento'))" update=":formulario:mensagem,:formulario:tabela"/>
+			    
+	    	 </p:dialog>	    	 
+			</div>
+		
+		
+ </ui:define>
+ </ui:composition>
+</html>

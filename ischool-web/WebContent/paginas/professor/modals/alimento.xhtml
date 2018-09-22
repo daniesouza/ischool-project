@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:dialog header="#{gerenciamentoAulaBean.entidade.evento.nome}"
+	widgetVar="modalAlimento" class="modalEventos" resizable="false"
+	draggable="false" width="430" style="height: auto;" modal="true">
+	<hr></hr>
+	<h:panelGrid columns="2"
+		rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoAlimento}">
+
+		<h:column>
+			<h:outputFormat value="Aluno:" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="#{gerenciamentoAulaBean.entidade.aluno.nome}"
+				rendered="#{!empty gerenciamentoAulaBean.entidade.aluno}"
+				styleClass="nome_aluno" />
+		</h:column>
+
+		<h:column>
+			<h:outputFormat value="Hora:" />
+		</h:column>
+
+		<h:column>
+			<p:calendar value="#{gerenciamentoAulaBean.entidade.dataInicio}"
+				disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado
+				 == gerenciamentoAulaBean.entidade.statusCancelado}"
+				pattern="HH:mm" timeOnly="true" styleClass="hora" />
+		</h:column>
+
+		<br />
+		<br />
+
+		<h:column>
+			<h:outputFormat value="Como foi o Alimento?" />
+			<p:selectOneRadio layout="pageDirection"
+				disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado 
+				== gerenciamentoAulaBean.entidade.statusCancelado}"
+				value="#{gerenciamentoAulaBean.entidade.avaliacaoEvento}">
+				<f:selectItem itemLabel="Otimo" itemValue="1" styleClass="hora" />
+				<f:selectItem itemLabel="Bom" itemValue="2" />
+				<f:selectItem itemLabel="Pouco" itemValue="3" />
+				<f:selectItem itemLabel="Não Aceitou" itemValue="4" />
+			</p:selectOneRadio>
+		</h:column>
+
+	</h:panelGrid>
+
+	<div class="input_text_container">
+		<h:panelGrid
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoAlimento}">
+			<h:column>
+				<h:outputFormat value="Observações" />
+			</h:column>
+			<h:column>
+				<p:inputTextarea rows="8" cols="50" counter="counter3"
+					maxlength="255"
+					readonly="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk or gerenciamentoAulaBean.entidade.statusEventoExecutado 
+					== gerenciamentoAulaBean.entidade.statusCancelado}"
+					counterTemplate="{0} Caracteres Restantes." autoResize="true"
+					value="#{gerenciamentoAulaBean.entidade.observacoes}"></p:inputTextarea>
+				<br />
+				<h:outputText styleClass="text_counter" id="counter3" />
+			</h:column>
+		</h:panelGrid>
+	</div>
+
+	<br />
+
+	<div class="button_container">
+		<p:commandButton value="salvar" title="clique para salvar"
+			action="#{gerenciamentoAulaBean.salvarOuAtualizar()}"
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoAlimento and gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusOk}"
+			disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeOk}"
+			oncomplete="validarFecharModal(args,PF('modalAlimento'))"
+			update=":formulario:mensagem,@(.alunoList#{gerenciamentoAulaBean.entidade.aluno.id})"
+			styleClass="button_class btn_salvar modalEventos" />
+
+		<p:commandButton value="Cancelar" onclick="PF('confirmCancelarAlim').show()"
+			disabled="#{gerenciamentoAulaBean.entidade.icone == gerenciamentoAulaBean.entidade.iconeNaoOk}"
+			rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoAlimento and gerenciamentoAulaBean.entidade.statusEventoExecutado == gerenciamentoAulaBean.entidade.statusOk}"
+			styleClass="button_class btn_apagar">
+		</p:commandButton>
+	</div>
+</p:dialog>
+
+
+	<p:confirmDialog id="confirmCancelarAlim"
+		widgetVar="confirmCancelarAlim" class="modalEventos"
+		header="Iniciando processo de cancelamento" severity="alert"
+		width="400" style="height: auto;">
+		<div class="apagar_registro">
+			<center>
+				<p:outputPanel style="position:relative;top:-20px">Tem certeza que deseja cancelar este evento? <br /><br />
+				Esta ação não poderá ser desfeita.</p:outputPanel>
+				<br />
+				<div class="button_container">
+					<p:commandButton value="Sim"
+						oncomplete="PF('confirmCancelarAlim').hide();validarFecharModal(args,PF('modalAlimento'))"
+						action="#{gerenciamentoAulaBean.cancelarEventoExecutado()}"
+						update=":formulario:mensagem,@(.alunoList#{gerenciamentoAulaBean.entidade.aluno.id})"
+						rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoAlimento}"
+						styleClass="button_class btn_apagar" />
+					<p:commandButton value="Não" onclick="PF('confirmCancelarAlim').hide()"
+						type="button" styleClass="button_class btn_salvar"
+						rendered="#{gerenciamentoAulaBean.entidade.tipo == gerenciamentoAulaBean.entidade.tipoAlimento}" />
+				</div>
+			</center>
+		</div>
+	</p:confirmDialog>
+
+
+</html>

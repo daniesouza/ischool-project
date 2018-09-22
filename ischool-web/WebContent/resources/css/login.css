@@ -1,0 +1,127 @@
+@font-face {
+	font-family: "KG Ten Thousand Reasons Alt";
+	src: url("../resources/fontes/KGTenThousandReasonsAlt.eot?")
+		format("eot"), url("../resources/fontes/KGTenThousandReasonsAlt.woff")
+		format("woff"), url("../resources/fontes/KGTenThousandReasonsAlt.ttf")
+		format("truetype"),
+		url("../resources/fontes/KGTenThousandReasonsAlt.svg#KGTenThousandReasonsAlt")
+		format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	background-image: url("../resources/images/login/bg.jpg");
+}
+
+#light_effect {
+	pointer-events: none;
+	cursor: default;
+	width: 700px;
+	height: 562px;
+	position: fixed;
+	left: 50%;
+	margin-left: -350px;
+	z-index: 1000;
+	background-image: url("../resources/images/login/luz.png");
+}
+
+#header {
+	width: 100%;
+	height: 30px;
+	background-image: url("../resources/images/login/header.png");
+}
+
+#container {
+	overflow: hidden;
+	width: 916px;
+	height: 590px;
+	margin: 0px auto;
+	text-align: center;
+	background-image: url("../resources/images/login/lousa.jpg");
+}
+
+#login_panel {
+	width: 847px;
+	height: 479px;
+	margin-top: 72px;
+	margin-left: 30px;
+	background: transparent;
+	border: none;
+}
+
+.logo {
+	margin: 20px auto;
+	width: 310px;
+	height: 68px;
+	background-image: url("../resources/images/login/logo.png");
+}
+
+#login_input_data {
+	width: 366px;
+	margin: 0 auto;
+}
+
+.input_table {
+	color: white;
+	font-family: "KG Ten Thousand Reasons Alt";
+	font-size: 24px;
+	letter-spacing: 3px;
+	margin-left: -100px;
+}
+
+.input_text {
+	margin-top: 15px;
+	padding-left: 10px;
+	width: 336px;
+	height: 57px;
+	border: none;
+	background: transparent
+		url("../resources/images/login/input_border.png");
+	border: none;
+	font-family: "KG Ten Thousand Reasons Alt" !important;
+	font-size: 22px;
+	color: white;
+	padding-left: 10px;
+}
+
+.esqueceu_senha {
+	color: white;
+	font-family: "KG Ten Thousand Reasons Alt" !important;
+	font-size: 20px;
+	text-decoration: none !important;
+}
+
+.login_button {
+	width: 252px;
+	height: 92px;
+	background: transparent url("../resources/images/login/btn_entrar.png")
+		!important;
+	border: none !important;
+}
+
+@media screen and (max-height: 758px) {
+	#footer {
+		text-align: center;
+		width: 100%;
+		height: 122px;
+		background: transparent url("../resources/images/login/footer.jpg");
+	}
+}
+
+@media screen and (min-height: 759px) {
+	#footer {
+		text-align: center;
+		width: 100%;
+		height: 122px;
+		background: transparent url("../resources/images/login/footer.jpg");
+		position: fixed;
+		bottom: 0;
+	}
+}
+
+#footer p {
+	color: white;
+	line-height: 30px;
+	font-family: 'Nunito', sans-serif;
+}
